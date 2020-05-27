@@ -24,11 +24,11 @@ export const fetchFromAccount = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE, SU
         });
 };
 
-export const signup = ({ username, password }) => fetchFromAccount({
+export const signup = ({ username, password, shortname }) => fetchFromAccount({
     endpoint: 'signup',
     options: {
         method: 'POST',
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, shortname }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
     },
@@ -37,11 +37,11 @@ export const signup = ({ username, password }) => fetchFromAccount({
     SUCCESS_TYPE: ACCOUNT.FETCH_SUCCESS
 });
 
-export const login = ({ username, password }) => fetchFromAccount({
+export const login = ({ username, password, shortname }) => fetchFromAccount({
     endpoint: 'login',
     options: {
         method: 'POST',
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, shortname }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
     },

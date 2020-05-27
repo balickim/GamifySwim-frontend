@@ -8,7 +8,7 @@ import ApplicationName from './ApplicationName';
 import { FaSignInAlt } from 'react-icons/fa';
 
 class AuthForm extends Component {
-    state = { username: '', password: '', buttonClicked: false };
+    state = { username: '', password: '', shortname: '', buttonClicked: false };
 
     updateUsername = event => {
 
@@ -20,20 +20,25 @@ class AuthForm extends Component {
         this.setState({ password: event.target.value });
     }
 
+    updateShortname = event => {
+
+        this.setState({ shortname: event.target.value });
+    }
+
     login = () => {
         this.setState({ buttonClicked: true });
 
-        const { username, password } = this.state;
+        const { username, password, shortname } = this.state;
 
-        this.props.login({ username, password });
+        this.props.login({ username, password, shortname });
     }
 
     signup = () => {
         this.setState({ buttonClicked: true });
 
-        const { username, password } = this.state;
+        const { username, password, shortname } = this.state;
 
-        this.props.signup({ username, password });
+        this.props.signup({ username, password, shortname });
     }
 
     get Error() {
@@ -82,13 +87,15 @@ class AuthForm extends Component {
                         <FormGroup className="inputBox">
                             <FormControl
                                 onKeyPress={this.onKeyPress}
-                                placeholder='School ID'
+                                value={this.state.shortname}
+                                placeholder='shortname'
+                                onChange={this.updateShortname}
                             />
                         </FormGroup>
                         <div style={{ textAlign: "center" }}>
                             <Button onClick={this.login}>Zaloguj <FaSignInAlt /> </Button>
-                            {/* <span> lub </span>
-                            <Button onClick={this.signup}>Zarejestruj</Button> */}
+                            <span> lub </span>
+                            <Button onClick={this.signup}>Zarejestruj</Button>
                         </div>
                     </Form>
                     <br />
