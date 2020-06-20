@@ -45,7 +45,7 @@ class AuthForm extends Component {
         if (
             this.state.buttonClicked &&
             this.props.account.status === fetchStates.error) {
-            return <div>{this.props.account.message}</div>
+            return <div className="AuthFormError">{this.props.account.message}</div>
         }
     }
 
@@ -99,7 +99,7 @@ class AuthForm extends Component {
                         </div>
                     </Form>
                     <br />
-                    {this.error}
+                    {this.Error}
                 </div>
             </div>
         );
