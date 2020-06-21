@@ -7,11 +7,11 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import history from './history';
 import Root from './components/Root';
-import RootAdmin from './components/RootAdmin';
 import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Table from './components/Table';
 
 const store = createStore(
     rootReducer,
@@ -36,7 +36,7 @@ store.dispatch(fetchAuthenticated())
                 <Router history={history}>
                     <Switch>
                         <Route exact path='/' component={Root} />
-                        <AuthRoute exact path='/admin' component={RootAdmin} />
+                        <AuthRoute exact path='/trainings' component={Table} />
                     </Switch>
                 </Router>
             </Provider>,
