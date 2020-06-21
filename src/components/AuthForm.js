@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Button, FormGroup, FormControl, Form } from 'react-bootstrap';
 import { signup, login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
-import ApplicationVersion from './ApplicationVersion';
-import ApplicationName from './ApplicationName';
 import { FaSignInAlt } from 'react-icons/fa';
 
 class AuthForm extends Component {
@@ -60,8 +58,6 @@ class AuthForm extends Component {
         return (
             <div className="AuthFormComponent">
                 <div className="box">
-                    {/* <ApplicationVersion />
-                    <h2><ApplicationName /></h2> */}
                     <Form onKeyPress={this.onKeyPress}>
                         <FormGroup className="inputBox">
                             <FormControl
