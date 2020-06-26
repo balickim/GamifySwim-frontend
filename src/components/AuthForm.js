@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, FormGroup, FormControl, Form } from 'react-bootstrap';
+import { Button, FormGroup, FormControl, Form, FormCheck } from 'react-bootstrap';
 import { signup, login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
 import { FaSignInAlt } from 'react-icons/fa';
 
 class AuthForm extends Component {
-    state = { username: '', password: '', shortname: '', buttonClicked: false };
+    state = { username: '', password: '', shortname: '', buttonClicked: false, rememberMe: false };
 
     updateUsername = event => {
 
@@ -26,12 +26,17 @@ class AuthForm extends Component {
     login = () => {
         this.setState({ buttonClicked: true });
 
-        const { username, password, shortname } = this.state;
+        const { username, password, shortname, rememberMe } = this.state;
 
         this.props.login({ username, password, shortname });
+
+        localStorage.setItem('rememberMe', rememberMe);
+        localStorage.setItem('username', rememberMe ? username : '');
+        localStorage.setItem('password', rememberMe ? password : '');
+        localStorage.setItem('shortname', rememberMe ? shortname : '');
     }
 
-    signup = () => {
+    signup = () => { //in future will not be used
         this.setState({ buttonClicked: true });
 
         const { username, password, shortname } = this.state;
@@ -50,9 +55,23 @@ class AuthForm extends Component {
     onKeyPress = (e) => {
         if (e.which === 13) {
             this.login();
-            // alert("Enter pressed");
         }
     }
+
+    handleChange = (event) => {
+        const input = event.target;
+        const value = input.type === 'checkbox' ? input.checked : input.value;
+    
+        this.setState({ [input.name]: value });
+    };
+
+    componentDidMount() {
+        const rememberMe = localStorage.getItem('rememberMe') === 'true';
+        const username = rememberMe ? localStorage.getItem('username') : '';
+        const password = rememberMe ? localStorage.getItem('password') : '';
+        const shortname = rememberMe ? localStorage.getItem('shortname') : '';
+        this.setState({ username, password, shortname, rememberMe });
+    };   
 
     render() {
         return (
@@ -63,29 +82,28 @@ class AuthForm extends Component {
                             <FormControl
                                 autoFocus={true}
                                 onKeyPress={this.onKeyPress}
-                                // onKeyUp="this.setAttribute('value', this.value);"
                                 type='text'
                                 value={this.state.username}
-                                placeholder='username'
+                                placeholder='Twoja nazwa użytkownika'
                                 onChange={this.updateUsername}
                             />
                         </FormGroup>
                         <FormGroup className="inputBox">
                             <FormControl
                                 onKeyPress={this.onKeyPress}
-                                // onkeyup="this.setAttribute('value', this.value);"
                                 type='password'
                                 value={this.state.password}
-                                placeholder='password'
+                                placeholder='oraz hasło'
                                 onChange={this.updatePassword}
                             />
                         </FormGroup>
                         <FormGroup className="inputBox">
                             <FormControl
+                                name='shortname'
                                 onKeyPress={this.onKeyPress}
                                 value={this.state.shortname}
-                                placeholder='shortname'
-                                onChange={this.updateShortname}
+                                placeholder='i skrócona nazwa Twojej szkoły'
+                                onChange={this.updateShortname, this.handleChange}
                             />
                         </FormGroup>
                         <div style={{ textAlign: "center" }}>
@@ -93,6 +111,12 @@ class AuthForm extends Component {
                             <span> lub </span>
                             <Button onClick={this.signup}>Zarejestruj</Button>
                         </div>
+                        <input 
+                            name="rememberMe" 
+                            checked={this.state.rememberMe} 
+                            onChange={this.handleChange} 
+                            type="checkbox"/> 
+                             Zapamiętaj mnie
                     </Form>
                     <br />
                     {this.Error}
