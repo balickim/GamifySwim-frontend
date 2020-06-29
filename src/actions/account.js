@@ -1,4 +1,4 @@
-import { ACCOUNT } from './types';
+import { ACCOUNT, ACCOUNT_TRAININGS } from './types';
 import { BACKEND } from '../config';
 
 export const fetchFromAccount = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE, SUCCESS_TYPE }) => dispatch => {
@@ -64,4 +64,17 @@ export const fetchAuthenticated = () => fetchFromAccount({
     FETCH_TYPE: ACCOUNT.FETCH,
     ERROR_TYPE: ACCOUNT.FETCH_ERROR,
     SUCCESS_TYPE: ACCOUNT.FETCH_AUTHENTICATED_SUCCESS
+});
+
+export const fetchTrainings = ({ limit, offset }) => fetchFromAccount({
+    endpoint: 'trainings',
+    options: {
+        method: 'POST',
+        body: JSON.stringify({ limit, offset }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    },
+    FETCH_TYPE: ACCOUNT_TRAININGS.FETCH,
+    ERROR_TYPE: ACCOUNT_TRAININGS.FETCH_ERROR,
+    SUCCESS_TYPE: ACCOUNT_TRAININGS.FETCH_SUCCESS
 });

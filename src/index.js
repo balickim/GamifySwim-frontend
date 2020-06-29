@@ -11,7 +11,7 @@ import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Table from './components/Table';
+import AccountTrainings from './components/TrainingTable';
 
 const store = createStore(
     rootReducer,
@@ -36,7 +36,7 @@ store.dispatch(fetchAuthenticated())
                 <Router history={history}>
                     <Switch>
                         <Route exact path='/' component={Root} />
-                        <AuthRoute exact path='/trainings' component={Table} />
+                        <AuthRoute exact path='/trainings' component={AccountTrainings} />
                     </Switch>
                 </Router>
             </Provider>,
