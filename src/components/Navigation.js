@@ -29,9 +29,11 @@ class Home extends Component {
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
-                        <Button onClick={this.props.logout} className='logout-button'>
-                            Wyloguj
-                        </Button>
+                        <Link to="/">
+                            <Button onClick={this.props.logout} className='logout-button'>
+                                Wyloguj
+                            </Button>
+                        </Link>
                     </Navbar.Collapse>
                 </Navbar>
             </div>
