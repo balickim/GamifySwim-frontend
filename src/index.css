@@ -1,5 +1,5 @@
 .AuthFormComponent{
-  background-image: url("../src/assets/auth-form-image.jpg");
+  background-image: url("../src/assets/auth-form-image-primary.jpg");
   height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
@@ -9,6 +9,10 @@
 .AuthFormComponent loginButton{
   text-align: center;
 }
+
+/* .content {
+  transition: 300ms;
+} */
 
 .account-dragon-row-input {
     width: 100px;
@@ -119,8 +123,6 @@
   90% { transform: translate(1px, 2px) rotate(0deg); }
   100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
-
-
 h1{
   font-size: 30px;
   color: #fff;
@@ -159,16 +161,9 @@ td{
   color: #fff;
   border-bottom: solid 1px rgba(255,255,255,0.1);
 }
-
-
 /* demo styles */
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-body{
-  background: -webkit-linear-gradient(left, #35c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
-  font-family: 'Roboto', sans-serif;
-}
 section{
   margin: 50px;
 }
@@ -210,4 +205,53 @@ section{
 } 
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
+/* img {
+  position: absolute;
+  width: 200px;
+  margin-top: 230px;
+  cursor: pointer;
+} */
+
+/* img.flip {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+} */
+
+
+.bar-group .name-label {
+  text-anchor: end;
+  font-weight: 300;
+  font-size: 1em;
+  fill: #333;
+}
+
+.bar-group .value-label {
+  text-anchor: end;
+  fill: #fff;
+  font-weight: 900;
+  font-size: 0.7em;
+}
+
+.container .bar-group {
+  transition: opacity 0.3s;
+}
+
+/* Fade bars when the chart is hovered */
+.container:hover .bar-group {
+  opacity: 0.3;
+}
+
+/* But don't fade the hovered bar... */
+.container .bar-group:hover {
+  opacity: 1;
+}
+
+.container .bar-group:hover .name-label {
+  font-weight: 400;
+}
+
+.container .bar-group:hover .value-label {
+  font-size: 0.8em;
 }

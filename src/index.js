@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
@@ -11,7 +11,10 @@ import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AccountTrainings from './components/TrainingTable';
+import TrainingTable from './components/TrainingTable';
+import test1 from './components/test1';
+import test2 from './components/test2';
+import Navigation from './components/Navigation';
 
 const store = createStore(
     rootReducer,
@@ -36,7 +39,14 @@ store.dispatch(fetchAuthenticated())
                 <Router history={history}>
                     <Switch>
                         <Route exact path='/' component={Root} />
-                        <AuthRoute exact path='/trainings' component={AccountTrainings} />
+                        <Fragment>
+                            <div className='content'>
+                                <Navigation />
+                                    <AuthRoute exact path='/trainings' component={TrainingTable} />
+                                    <AuthRoute exact path='/test1' component={test1} />
+                                    <AuthRoute exact path='/test2' component={test2} />
+                            </div>
+                        </Fragment>
                     </Switch>
                 </Router>
             </Provider>,

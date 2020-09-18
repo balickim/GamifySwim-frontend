@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchTrainings } from '../actions/account';
-import Navigation from './Navigation';
 
 class AccountTrainings extends Component {
     state = { limit: 20, offset: 10 };
@@ -21,11 +20,10 @@ class AccountTrainings extends Component {
     render() {
         return (
             <div>
-                <Navigation />
                 <section>
                     <h1>Treningi</h1>
-                        <div class="tbl-header">
-                            <table cellpadding="0" cellspacing="0" border="0">
+                        <div className="tbl-header">
+                            <table cellPadding="0" cellSpacing="0" border="0">
                                 <thead>
                                     <tr>
                                     <th>ID</th>
@@ -37,8 +35,8 @@ class AccountTrainings extends Component {
                                 </thead>
                                 </table>
                             </div>
-                <div class="tbl-content">
-    <table cellpadding="0" cellspacing="0" border="0">
+                <div className="tbl-content">
+    <table cellPadding="0" cellSpacing="0" border="0">
       <tbody>
                 {/* <div>Username: {this.props.accountTrainings}</div> */}
                 {  
@@ -50,7 +48,7 @@ class AccountTrainings extends Component {
                                 <td>{training.title}</td>
                                 <td>{training.description}</td>
                                 <td>{training.poolid}</td>
-                                <td>{training.training_date}</td>
+                                {/* <td>{window["formatDate"]("Date.parse(training.training_date)")}{Date.parse(training.training_date)}</td> */}
                             </tr>
                         )
                     })

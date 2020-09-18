@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Nav, Navbar, NavDropdown, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import AccountInfo from './AccountInfo';
 import { logout } from '../actions/account';
-import Helmet from 'react-helmet';
+import PieChartComponent from './PieChartComponent'
 import Navigation from './Navigation';
 
 class Home extends Component {
     render() {
         return (
-            <div>
+            <div className='content'>
                 <Navigation />
-                <hr />
-                <AccountInfo />
-                <hr />
-                <br />
+                <PieChartComponent />
+                <PieChartComponent />
+                <PieChartComponent />
+                <PieChartComponent />
             </div>
         );
     }
 }
 
-export default connect(null, { logout })(Home);
+export default Home//connect(null, { logout })(Home);
