@@ -15,6 +15,8 @@ import TrainingTable from './components/TrainingTable';
 import test1 from './components/test1';
 import test2 from './components/test2';
 import Navigation from './components/Navigation';
+import Designer from './stimulsoft/Designer';
+import ContestantTable from './components/ContestantTable';
 
 const store = createStore(
     rootReducer,
@@ -32,6 +34,8 @@ const AuthRoute = props => {
     return <Route path={path} component={component} />;
 }
 
+const reload = () => window.location.reload();
+
 store.dispatch(fetchAuthenticated())
     .then(() => {
         render(
@@ -39,11 +43,14 @@ store.dispatch(fetchAuthenticated())
                 <Router history={history}>
                     <Switch>
                         <Route exact path='/' component={Root} />
+                        <AuthRoute exact path="http://localhost:8080/" />
+                        <AuthRoute exact path="/stimulsoft" component={Designer} />
                         <Fragment>
                             <div className='content'>
                                 <Navigation />
                                     <AuthRoute exact path='/trainings' component={TrainingTable} />
-                                    <AuthRoute exact path='/test1' component={test1} />
+                                    <AuthRoute exact path='/contestants' component={ContestantTable} />
+                                    {/* <AuthRoute exact path='/test1' component={test1} /> */}
                                     <AuthRoute exact path='/test2' component={test2} />
                             </div>
                         </Fragment>

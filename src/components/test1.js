@@ -1,13 +1,58 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
+// import NewWindow from './NewWindow'
+// import AccountInfo from './Sidebar/AccountInfo'
 
-class Test1 extends Component {
-    render() {
-        return (
-            <div>
-                <h3>Test1</h3>
-            </div>
-        )
-    }
-}
+// class Test1 extends Component {
+//         constructor(props) {
+//         super(props);
+        
+//         this.state = {
+//         counter: 0,
+//         showWindowPortal: false,
+//         };
+        
+//         this.toggleWindowPortal = this.toggleWindowPortal.bind(this);
+//     }
 
-export default Test1
+//     componentDidMount() {
+//         window.setInterval(() => {
+//         this.setState(state => ({
+//             ...state,
+//             counter: state.counter + 1,
+//         }));
+//         }, 1000);
+//     }
+    
+//     toggleWindowPortal() {
+//         this.setState(state => ({
+//         ...state,
+//         showWindowPortal: !state.showWindowPortal,
+//         }));
+//     }
+    
+//     render() {
+//         return (
+//             <div>
+//                 <h1>Counter: {this.state.counter}</h1>
+                    
+//                 <button onClick={this.toggleWindowPortal}>
+//                 {this.state.showWindowPortal ? 'Close the' : 'Open a'} Portal
+//                 </button>
+                
+//                 {this.state.showWindowPortal && (
+//                 <NewWindow width={800} height={600} >
+//                     <h1>Counter in a portal: {this.state.counter}</h1>
+//                     <p>Even though I render in a different window, I share state!</p>
+//                     <AccountInfo />
+                    
+//                     <button onClick={() => this.setState({ showWindowPortal: false })} >
+//                     Close me!
+//                     </button>
+//                 </NewWindow>
+//                 )}
+//             </div>
+//         )
+//     }
+// }
+
+// export default Test1
