@@ -4,6 +4,8 @@ import { fetchAccountInfo } from '../../actions/accountInfo';
 import styled from 'styled-components'
 import Image from '../../assets/test2.png'
 
+import { fetchContestant } from '../../actions/contestant';
+
 const Container = styled.div`
     text-aling: center;
     margin-top: 2rem;
@@ -22,6 +24,7 @@ class AccountInfo extends Component {
     componentDidMount() {
         this.props.fetchAccountInfo();
     }
+    
         render() {
             return (
                 <Container>

@@ -14,7 +14,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: 300ms;
+    // transition: 300ms;
 
 `
 class Sidebar extends Component {
