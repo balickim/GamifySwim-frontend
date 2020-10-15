@@ -54,15 +54,12 @@ class Topbar extends Component {
                             <Nav.Link as={NavLink} to='/trainings' exact>
                                 Treningi
                             </Nav.Link>
-                            <Nav.Link as={NavLink} to='/test2'>
-                                Test2
-                            </Nav.Link>
                             <Nav.Link as={NavLink} to='/contestants'>
                                 Zawodnicy
                             </Nav.Link>
-                            <Nav.Link href='http://localhost:8080/' target="_blank">
+                            {/* <Nav.Link href='http://localhost:8080/' target="_blank">
                                 Designer
-                            </Nav.Link>
+                            </Nav.Link> */}
                         </Nav>
                             <Link to="/">
                                 <Button onClick={this.props.logout} className='btn-outline-light'>

@@ -11,10 +11,10 @@ const Menu = () => {
     return (
         <Container>
             <MenuLink title="Home" icon={'home'} active/>
-            <MenuLink title="Deposits" icon={'file-multiple'} />
+            {/* <MenuLink title="Deposits" icon={'file-multiple'} />
             <MenuLink title="Offers" icon={'gift'}/>
             <MenuLink title="Payments" icon={'bank'}/>
-            <MenuLink title="Settings" icon={'cog'} />
+            <MenuLink title="Settings" icon={'cog'} /> */}
         </Container>
     )
 }
