@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useTable, useFilters, useSortBy, usePagination } from "react-table";
+import React, { useState } from 'react';
+import { useTable, useFilters, usePagination, useGlobalFilter, useSortBy } from "react-table";
 import styled from 'styled-components';
 // import NewWindow from './NewWindow';
 
@@ -11,69 +11,181 @@ const TrStyled = styled.tr`
   }
 `
 
+const DivForm = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+`
+
+function GlobalFilter({
+    preGlobalFilteredRows,
+    globalFilter,
+    setGlobalFilter,
+}) {
+    const count = preGlobalFilteredRows.length
+    const [value, setValue] = React.useState(globalFilter)
+    const onChange = value => {
+        setGlobalFilter(value || undefined)
+    }
+
+    return (
+        <span>
+            Search:{' '}
+            <input
+                className="form-control"
+                value={value || ""}
+                onChange={e => {
+                    setValue(e.target.value);
+                    onChange(e.target.value);
+                }}
+                placeholder={`${count} rekordów...`}
+            />
+        </span>
+    )
+}
+
+function DefaultColumnFilter({
+    column: { filterValue, preFilteredRows, setFilter },
+}) {
+    const count = preFilteredRows.length
+
+    return (
+        <input
+            className="form-control"
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined)
+            }}
+            placeholder={`Przeszukaj ${count} rekordów...`}
+        />
+    )
+}
+
 export default function Table(props) {
-  let {columns, data, pageSize, pageIndex} = useTable(props);
+  let {columns, data} = useTable(props);
   const [filterInput, setFilterInput] = useState("");
   const [currentData, setCurrentData ] = useState([]);
+
+  const defaultColumn = React.useMemo(
+        () => ({
+            // Default Filter UI
+            Filter: DefaultColumnFilter,
+        }),
+        []
+    )
   
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    // rows,
     page,
     prepareRow,
     setFilter,
-    // state: { pageIndex, pageSize },
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize, globalFilter },
+    // state,
+    preGlobalFilteredRows,
+    setGlobalFilter,
   } = useTable(
     {
       columns,
-      data: currentData,
+      data,
       initialState: {
-        pageSize,
-        pageIndex,
+        pageIndex: 0,
       },
-      manualPagination: true,
-      pageCount: 10,
+      defaultColumn
     },
     useFilters,
+    useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
-
-  const handleFilterChange = e => {
-    const value = e.target.value || undefined;
-    setFilter("secondname", value);
-    setFilterInput(value);
-  };
-
-  useEffect(() => {
-    setCurrentData(data.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize));
-  }, [pageIndex, pageSize])
 
   return (
     <div>
-      <input
-        value={filterInput}
-        onChange={handleFilterChange}
-        placeholder={"Search name"}
+    <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={globalFilter}
+                setGlobalFilter={setGlobalFilter}
       />
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+        <span>
+          Strona{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <span>
+          | Idź do:{' '}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              gotoPage(page)
+            }}
+            style={{ width: '100px' }}
+          />
+        </span>{' '}
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Pokaż {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className={
-                    column.isSorted
-                      ? column.isSortedDesc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : ""
-                  }
-                >
-                  {column.render("Header")}
+                <th {...column.getHeaderProps()}>
+                <div>
+                    {column.canGroupBy ? (
+                      // If the column can be grouped, let's add a toggle
+                      <span {...column.getGroupByToggleProps()}>
+                        {column.isGrouped ? '🛑 ' : '👊 '}
+                      </span>
+                    ) : null}
+                    <span {...column.getSortByToggleProps()}>
+                      {column.render('Header')}
+                      {/* Add a sort direction indicator */}
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
+                    </span>
+                  </div>
+                  {/* Render the columns filter UI */}
+                  <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>
@@ -85,7 +197,6 @@ export default function Table(props) {
             return (
               <TrStyled {...row.getRowProps()}
                   onClick={()=>props.handleShow(row)}
-                  // onClick={()=>props.toggleWindowPortal(row)}
                   >
                 {row.cells.map(cell => {
                   return (
