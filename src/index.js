@@ -11,12 +11,13 @@ import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import TrainingTable from './components/TrainingTable';
-import test1 from './components/test1';
-import test2 from './components/test2';
+import Home from './components/Home';
+import Trainings from './components/Trainings';
+// import test1 from './components/test1';
+// import test2 from './components/test2';
 import Navigation from './components/Navigation';
 import Designer from './stimulsoft/Designer';
-import ContestantTable from './components/ContestantTable';
+import Contestants from './components/Contestants';
 
 const store = createStore(
     rootReducer,
@@ -48,10 +49,11 @@ store.dispatch(fetchAuthenticated())
                         <Fragment>
                             <div className='content'>
                                 <Navigation />
-                                    <AuthRoute exact path='/trainings' component={TrainingTable} />
-                                    <AuthRoute exact path='/contestants' component={ContestantTable} />
+                                    <AuthRoute exact path='/home' component={Home} />
+                                    <AuthRoute exact path='/trainings' component={Trainings} />
+                                    <AuthRoute exact path='/contestants' component={Contestants} />
                                     {/* <AuthRoute exact path='/test1' component={test1} /> */}
-                                    <AuthRoute exact path='/test2' component={test2} />
+                                    {/* <AuthRoute exact path='/test2' component={test2} /> */}
                             </div>
                         </Fragment>
                     </Switch>
