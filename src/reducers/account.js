@@ -1,7 +1,7 @@
 import { ACCOUNT } from '../actions/types';
 import fetchStates from './fetchStates';
 
-const DEFAULT_ACCOUNT = { loggedIn: false };
+const DEFAULT_ACCOUNT = { loggedIn: false, roleId: null };
 
 const account = (state = DEFAULT_ACCOUNT, action) => {
     switch (action.type) {
@@ -10,11 +10,11 @@ const account = (state = DEFAULT_ACCOUNT, action) => {
         case ACCOUNT.FETCH_ERROR:
             return { ...state, status: fetchStates.error, message: action.message }
         case ACCOUNT.FETCH_SUCCESS:
-            return { ...state, status: fetchStates.success, message: action.message, loggedIn: true };
+            return { ...state, status: fetchStates.success, message: action.message, roleId: action.roleId, loggedIn: true};
         case ACCOUNT.FETCH_LOGOUT_SUCCESS:
-            return { ...state, status: fetchStates.success, message: action.message, loggedIn: false };
+            return { ...state, status: fetchStates.success, message: action.message, roleId: roleId, loggedIn: false};
         case ACCOUNT.FETCH_AUTHENTICATED_SUCCESS:
-            return { ...state, status: fetchStates.success, message: action.message, loggedIn: action.authenticated };
+            return { ...state, status: fetchStates.success, message: action.message, roleId: action.roleId, loggedIn: action.authenticated};
         default:
             return state;
     }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Nav, Navbar, NavDropdown, Button, NavItem, MenuItem} from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom'
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link, NavLink, Redirect } from 'react-router-dom'
 import { logout } from '../actions/account';
 import Helmet from 'react-helmet';
 
@@ -14,6 +13,13 @@ class Topbar extends Component {
     handleToggle = () => {
         this.setState({ isOpen: !this.state.isOpen }
         ,() => this.calculateSidebar());
+    };
+
+    logoutThenReload = () => {
+        this.props.logout()
+        .then(() => {
+            window.location.reload(false);
+          });
     };
 
     calculateSidebar = () => {
@@ -31,11 +37,12 @@ class Topbar extends Component {
             }
         };
 
-     componentDidMount() {
+    componentDidMount() {
         this.calculateSidebar();
     };
 
     render() {
+        const userRole = this.props.userRole;
         return (
             <div>
                 <Helmet>
@@ -47,25 +54,37 @@ class Topbar extends Component {
                 </Helmet>
                 <Navbar className="navbar-dark" bg="primary" expand="lg">
                     <Button onClick={this.handleToggle}>☰</Button>
-                    <Navbar.Brand as={NavLink} to="/">GamifySwim</Navbar.Brand>
+                    <Navbar.Brand as={NavLink} to="/home">GamifySwim</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            <Nav.Link as={NavLink} to='/trainings' exact>
-                                Treningi
-                            </Nav.Link>
-                            <Nav.Link as={NavLink} to='/contestants'>
-                                Zawodnicy
-                            </Nav.Link>
+                            {userRole === 2 ? 
+                                <Nav.Link as={NavLink} to='/trainings' exact>
+                                    Treningi
+                                </Nav.Link> 
+                            : null }
+                            {userRole === 1 ? 
+                                <Nav.Link as={NavLink} to='/contestants'>
+                                    Zawodnicy
+                                </Nav.Link> 
+                            : null }
+                            {userRole === 1 ? 
+                                <Nav.Link as={NavLink} to='/test'>
+                                    Test
+                                </Nav.Link> 
+                            : null }
+                            {userRole === 1 ? 
+                                <Nav.Link as={NavLink} to='/test2'>
+                                    Test2
+                                </Nav.Link> 
+                            : null }
                             {/* <Nav.Link href='http://localhost:8080/' target="_blank">
                                 Designer
                             </Nav.Link> */}
                         </Nav>
-                            <Link to="/">
-                                <Button onClick={this.props.logout} className='btn-outline-light'>
-                                    Wyloguj
-                                </Button>
-                            </Link>
+                            <Button onClick={this.logoutThenReload} className='btn-outline-light'>
+                                Wyloguj
+                            </Button>
                     </Navbar.Collapse>
                 </Navbar>
             </div>

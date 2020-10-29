@@ -29,7 +29,7 @@ class AccountInfo extends Component {
             return (
                 <Container>
                     <ProfileImg src={Image} />
-                    <ProfileName>{this.props.accountInfo.username} (id: {this.props.accountInfo.balance})</ProfileName>
+                    <ProfileName>{this.props.accountInfo.username} (id: {this.props.accountInfo.id}) (roleId: {this.props.accountInfo.roleId})</ProfileName>
                 </Container>
             )
         }
