@@ -37,13 +37,11 @@ function ContestantInfo(props) {
 
   if(!isLoading) return (
             <div>
-                <p>{data.contestant.name}</p>
-                <p>{data.contestant.secondname}</p>
-                <p>{data.contestant.age}</p>
-                <p>{data.contestant.genderid}</p>
-                <PieChartComponent/>
-                <PieChartComponent/>
-                <PieChartComponent/>
+                <div ><h2> Imię: </h2><h2>{data.contestant.name}</h2></div>
+                <div ><h2> Nazwisko: </h2><h2>{data.contestant.secondname}</h2></div>
+                <div ><h3> Brązowych medali </h3><h3 style={{color: 'bronze'}}>{data.contestant.bronze_medal}</h3></div>
+                <div ><h3> Srebrnych medali </h3><h3 style={{color: 'silver'}}>{data.contestant.silver_medal}</h3></div>
+                <div ><h3> Złotych medali </h3><h3 style={{color: 'gold'}}>{data.contestant.gold_medal}</h3></div>
                 <PieChartComponent/>
             </div>
         );

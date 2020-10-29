@@ -77,6 +77,19 @@ function Contestants(props) {
           {
             "Header": "Data urodzenia",
             "accessor": "date_of_birth"
+          },
+          {
+            "Header": "Data urodzenia",
+            "accessor": "created_date",
+            "width": '200px'
+          },
+          {
+            "Header": "Data urodzenia",
+            "accessor": "country_code"
+          },
+          {
+            "Header": "Data urodzenia",
+            "accessor": "best_time"
           }
         ]
       }
