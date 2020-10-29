@@ -28,7 +28,10 @@ class AuthForm extends Component {
 
         const { username, password, shortname, rememberMe } = this.state;
 
-        this.props.login({ username, password, shortname });
+        this.props.login({ username, password, shortname })
+            .then(() => {
+                location.replace("./home");
+            });
 
         localStorage.setItem('rememberMe', rememberMe);
         localStorage.setItem('username', rememberMe ? username : '');
@@ -54,7 +57,8 @@ class AuthForm extends Component {
 
     onKeyPress = (e) => {
         if (e.which === 13) {
-            this.login();
+            // this.login();
+            document.getElementById("loginButton").click();
         }
     }
 
@@ -107,7 +111,7 @@ class AuthForm extends Component {
                             />
                         </FormGroup>
                         <div style={{ textAlign: "center" }}>
-                            <Button onClick={this.login}>Zaloguj <FaSignInAlt /> </Button>
+                            <Button id='loginButton' onClick={this.login}>Zaloguj <FaSignInAlt /> </Button>
                             <span> lub </span>
                             <Button onClick={this.signup}>Zarejestruj</Button>
                         </div>
