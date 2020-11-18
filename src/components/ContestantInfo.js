@@ -18,7 +18,7 @@ function ContestantInfo(props) {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
     };
-    fetch(`${BACKEND.ADDRESS}/contestant/info`, requestOptions)
+    fetch(`${BACKEND.ADDRESS}/user/contestants/info`, requestOptions)
         .then(response => response.json())
         .then(data => {
             setData(data);
@@ -26,6 +26,7 @@ function ContestantInfo(props) {
         });
   }, []);
 
+console.log('%cContestantInfo.js line:29 props.id', 'color: #007acc;', props.id);
   if(isLoading) return (
     <div className="d-flex justify-content-center">
         {/* <Spinner className="m-5 spinner-border text-primary" style={{width: '10rem', height: '10rem'}} role="status">
@@ -38,10 +39,7 @@ function ContestantInfo(props) {
   if(!isLoading) return (
             <div>
                 <div ><h2> Imię: </h2><h2>{data.contestant.name}</h2></div>
-                <div ><h2> Nazwisko: </h2><h2>{data.contestant.secondname}</h2></div>
-                <div ><h3> Brązowych medali </h3><h3 style={{color: 'bronze'}}>{data.contestant.bronze_medal}</h3></div>
-                <div ><h3> Srebrnych medali </h3><h3 style={{color: 'silver'}}>{data.contestant.silver_medal}</h3></div>
-                <div ><h3> Złotych medali </h3><h3 style={{color: 'gold'}}>{data.contestant.gold_medal}</h3></div>
+                <div ><h2> Nazwisko: </h2><h2>{data.contestant.surname}</h2></div>
                 <PieChartComponent/>
             </div>
         );

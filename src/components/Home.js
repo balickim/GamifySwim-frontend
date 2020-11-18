@@ -1,21 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { logout } from '../actions/account';
+import React from 'react';
+import ProgressBar from './dashboard/ProgressBar';
 import PieChartComponent from './PieChartComponent'
-import Navigation from './Navigation';
 
-class Home extends Component {
-    render() {
+function Home(){
         return (
             <div className='content'>
-                <Navigation />
                 <PieChartComponent />
                 <PieChartComponent />
-                <PieChartComponent />
-                <PieChartComponent />
+
+                <ProgressBar />
             </div>
         );
-    }
 }
 
 export default Home//connect(null, { logout })(Home);

@@ -69,8 +69,8 @@ class Topbar extends Component {
                                 </Nav.Link> 
                             : null }
                             {userRole === 1 ? 
-                                <Nav.Link as={NavLink} to='/test'>
-                                    Test
+                                <Nav.Link as={NavLink} to='/usermanagement'>
+                                    Zarządzaj
                                 </Nav.Link> 
                             : null }
                             {userRole === 1 ? 

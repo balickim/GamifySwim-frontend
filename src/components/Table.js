@@ -1,20 +1,72 @@
 import React, { useState } from 'react';
-import { useTable, useFilters, usePagination, useGlobalFilter, useSortBy } from "react-table";
+import { useTable, useFilters, usePagination, useGlobalFilter, useSortBy, useBlockLayout, useResizeColumns } from "react-table";
 import styled from 'styled-components';
 // import NewWindow from './NewWindow';
 
 const TrStyled = styled.tr`
-    background-color: #007BB5;
-    ${TrStyled}:hover {
-        background-color: white;
-        cursor: pointer;
-  }
+  //   background-color: #007BB5;
+  //   ${TrStyled}:hover {
+  //       background-color: white;
+  //       cursor: pointer;
+  // }
 `
 
 const DivForm = styled.div`
     display: flex;
     flex-flow: row wrap;
     align-items: center;
+  }
+`
+
+const Styles = styled.div`
+  padding: 1rem;
+
+  .table {
+    display: inline-block;
+    border-spacing: 0;
+    border: 1px solid black;
+
+    .tr {
+      :last-child {
+        .td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    .th,
+    .td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+
+      ${'' /* In this example we use an absolutely position resizer,
+       so this is required. */}
+      position: relative;
+
+      :last-child {
+        border-right: 0;
+      }
+
+      .resizer {
+        display: inline-block;
+        background: blue;
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateX(50%);
+        z-index: 1;
+        ${'' /* prevents from scrolling while dragging on touch devices */}
+        touch-action:none;
+
+        &.isResizing {
+          background: red;
+        }
+      }
+    }
   }
 `
 
@@ -70,6 +122,9 @@ export default function Table(props) {
   const defaultColumn = React.useMemo(
         () => ({
             // Default Filter UI
+            minWidth: 30,
+            width: 150,
+            maxWidth: 400,
             Filter: DefaultColumnFilter,
         }),
         []
@@ -95,6 +150,7 @@ export default function Table(props) {
     // state,
     preGlobalFilteredRows,
     setGlobalFilter,
+    resetResizing,
   } = useTable(
     {
       columns,
@@ -104,10 +160,12 @@ export default function Table(props) {
       },
       defaultColumn
     },
+    useBlockLayout,
+    useResizeColumns,
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination,
+    usePagination
   );
 
   return (
@@ -161,12 +219,14 @@ export default function Table(props) {
           ))}
         </select>
       </div>
-      <table {...getTableProps()}>
+      <button onClick={resetResizing}>Reset Resizing</button>
+      <table {...getTableProps()} className="table">
         <thead>
           {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()} className="tr">
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
+                <th {...column.getHeaderProps()} className="th">
+                
                 <div>
                     {column.canGroupBy ? (
                       // If the column can be grouped, let's add a toggle
@@ -175,7 +235,7 @@ export default function Table(props) {
                       </span>
                     ) : null}
                     <span {...column.getSortByToggleProps()}>
-                      {column.render('Header')}
+                      
                       {/* Add a sort direction indicator */}
                       {column.isSorted
                         ? column.isSortedDesc
@@ -183,9 +243,16 @@ export default function Table(props) {
                           : ' 🔼'
                         : ''}
                     </span>
+                    <div
+                      {...column.getResizerProps()}
+                      className={`resizer ${
+                        column.isResizing ? 'isResizing' : ''
+                      }`}
+                  />
                   </div>
                   {/* Render the columns filter UI */}
                   <div>{column.canFilter ? column.render('Filter') : null}</div>
+                {column.render('Header')}
                 </th>
               ))}
             </tr>
@@ -195,15 +262,17 @@ export default function Table(props) {
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <TrStyled {...row.getRowProps()}
+              <tr {...row.getRowProps()} className="tr"
                   onClick={()=>props.handleShow(row)}
                   >
                 {row.cells.map(cell => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <td {...cell.getCellProps()} className="td">
+                      {cell.render("Cell")}
+                    </td>
                   );
                 })}
-              </TrStyled>
+              </tr>
             );
           })}
         </tbody>

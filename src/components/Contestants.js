@@ -15,7 +15,7 @@ function Contestants(props) {
 
     function handleShow(row){
         setShow(true);
-        setId(row.original.contestantid); 
+        setId(row.original.id); 
     }
 
     useEffect(() => {
@@ -25,7 +25,7 @@ function Contestants(props) {
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include'
       };
-      fetch(`${BACKEND.ADDRESS}/contestant/contestants`, requestOptions)
+      fetch(`${BACKEND.ADDRESS}/user/contestants`, requestOptions)
           .then(response => response.json())
           .then(data => {
               setData(data);
@@ -60,23 +60,23 @@ function Contestants(props) {
         "columns": [
           {
             "Header": "ID",
-            "accessor": "contestantid"
+            "accessor": "id"
           },
           {
             "Header": "Nazwisko",
-            "accessor": "secondname"
+            "accessor": "surname"
           },
           {
             "Header": "Imię",
             "accessor": "name"
           },
           {
-            "Header": "Wiek",
-            "accessor": "age"
+            "Header": "Drugie imię",
+            "accessor": "secondname"
           },
           {
             "Header": "Data urodzenia",
-            "accessor": "date_of_birth"
+            "accessor": "birthdate"
           },
           {
             "Header": "Data urodzenia",

@@ -17,6 +17,7 @@ import Navigation from './components/Navigation';
 import Designer from './stimulsoft/Designer';
 import Contestants from './components/Contestants';
 import PermissionDenied from './components/PermissionDenied';
+import UserManagement from './components/admin/UserManagement';
 
 const store = createStore(
     rootReducer,
@@ -54,6 +55,7 @@ store.dispatch(fetchAuthenticated())
                                     <AuthRoute exact path='/home' component={Home} />
                                     {authorize(2) ? <AuthRoute exact path='/trainings' component={Trainings}/> : null }
                                     {authorize(1) ? <AuthRoute exact path='/contestants' component={Contestants}/> : null }
+                                    {authorize(1) ? <AuthRoute exact path='/usermanagement' component={UserManagement}/> : null }
                             </div>
                         </Fragment>
                     </Switch>

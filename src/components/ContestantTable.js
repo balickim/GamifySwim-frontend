@@ -18,7 +18,7 @@ class ContestantsTable extends Component {
         
         this.state = {
         showWindowPortal: false,
-        contestantid: null,
+        id: null,
         };
         
         this.toggleWindowPortal = this.toggleWindowPortal.bind(this);
@@ -39,7 +39,7 @@ class ContestantsTable extends Component {
         
         // this.setState(state => ({
         //     ...state,
-        //     contestantid: state.contestantid,
+        //     id: state.id,
         // }));
     }
 
@@ -53,10 +53,10 @@ class ContestantsTable extends Component {
     render() {
         return (
             <div>
-                <p>{this.state.contestantid}</p>
+                <p>{this.state.id}</p>
                 {this.state.showWindowPortal && (
                 <NewWindow width={600} height={400} >
-                    <p>{this.state.contestantid}</p>
+                    <p>{this.state.id}</p>
                     <button onClick={() => this.setState({ showWindowPortal: false })} >
                     Close me!
                     </button>
@@ -81,12 +81,12 @@ class ContestantsTable extends Component {
                 {  
                     this.props.contestants.contestants.map(contestant => {
                         return (
-                            <TrStyled key={contestant.contestantid}
-                            onClick={this.toggleWindowPortal} onMouseEnter={this.setContestantid}
+                            <TrStyled key={contestant.id}
+                            onClick={this.toggleWindowPortal} onMouseEnter={this.setId}
                             >
-                                <td>{contestant.contestantid}</td>
+                                <td>{contestant.id}</td>
                                 <td>{contestant.name}</td>
-                                <td>{contestant.secondname}</td>
+                                <td>{contestant.surname}</td>
                                 {/* <td>{contestant.description}</td> */}
                                 {/* <td>{contestant.poolid}</td> */}
                             </TrStyled>

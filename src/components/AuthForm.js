@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, FormGroup, FormControl, Form, FormCheck } from 'react-bootstrap';
-import { signup, login } from '../actions/account';
+import { login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
 import { FaSignInAlt } from 'react-icons/fa';
 
@@ -39,13 +39,13 @@ class AuthForm extends Component {
         localStorage.setItem('shortname', rememberMe ? shortname : '');
     }
 
-    signup = () => { //in future will not be used
-        this.setState({ buttonClicked: true });
+    // signup = () => { //in future will not be used
+    //     this.setState({ buttonClicked: true });
 
-        const { username, password, shortname } = this.state;
+    //     const { username, password, shortname } = this.state;
 
-        this.props.signup({ username, password, shortname });
-    }
+    //     this.props.signup({ username, password, shortname });
+    // }
 
     get Error() {
         if (
@@ -57,8 +57,8 @@ class AuthForm extends Component {
 
     onKeyPress = (e) => {
         if (e.which === 13) {
-            // this.login();
             document.getElementById("loginButton").click();
+            this.login();
         }
     }
 
@@ -112,8 +112,6 @@ class AuthForm extends Component {
                         </FormGroup>
                         <div style={{ textAlign: "center" }}>
                             <Button id='loginButton' onClick={this.login}>Zaloguj <FaSignInAlt /> </Button>
-                            <span> lub </span>
-                            <Button onClick={this.signup}>Zarejestruj</Button>
                         </div>
                         <input 
                             name="rememberMe" 
@@ -132,5 +130,5 @@ class AuthForm extends Component {
 
 export default connect(
     ({ account }) => ({ account }),
-    { signup, login }
+    { login }
 )(AuthForm);

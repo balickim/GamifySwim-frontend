@@ -4,7 +4,7 @@ import { BACKEND } from '../config';
 export const fetchFromContestant = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE, SUCCESS_TYPE }) => dispatch => {
     dispatch({ type: FETCH_TYPE });
 
-    return fetch(`${BACKEND.ADDRESS}/contestant/${endpoint}`, options)
+    return fetch(`${BACKEND.ADDRESS}/user/${endpoint}`, options)
         .then(response => response.json())
         .then(json => {
             if (json.type === 'error') {
@@ -25,7 +25,7 @@ export const fetchFromContestant = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE,
 };
 
 export const fetchContestants = ({ limit, offset }) => fetchFromContestant({
-    endpoint: 'contestants',
+    endpoint: 'users',
     options: {
         method: 'POST',
         body: JSON.stringify({ limit, offset }),
