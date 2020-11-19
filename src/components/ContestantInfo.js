@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import { BACKEND } from '../config';
 import { Spinner } from 'react-bootstrap';
 import { fetchContestantInfo } from '../actions/contestant';
-import PieChartComponent from './PieChartComponent';
+import PieChartComponent from './Dashboard/PieChartComponent';
 import Swimmer from '../assets/swimmer.gif';
 
 function ContestantInfo(props) {

@@ -10,7 +10,7 @@ import history from './history';
 import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
-import Home from './components/Home';
+import Home from './components/Dashboard/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Trainings from './components/Trainings';
 import Navigation from './components/Navigation';
