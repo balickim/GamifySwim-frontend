@@ -17,7 +17,15 @@ class Calendar extends React.Component {
     };
   }
 
-  SAFE_componentWillMount() {
+  // SAFE_componentWillMount() {
+  //   this.previous = this.previous.bind(this);
+  //   this.next = this.next.bind(this);
+  //   this.addEvent = this.addEvent.bind(this);
+  //   this.showCalendar = this.showCalendar.bind(this);
+  //   this.goToCurrentMonthView = this.goToCurrentMonthView.bind(this);
+  // }
+
+  componentDidMount() {
     this.previous = this.previous.bind(this);
     this.next = this.next.bind(this);
     this.addEvent = this.addEvent.bind(this);

@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-transition-group';
+// import { CSSTransitionGroup } from 'react-transition-group';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 class Events extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class Events extends React.Component {
           className="event-container"
           onClick={() => removeEvent(i)}
         >
-          <ReactCSSTransitionGroup
+          <CSSTransitionGroup
             component="div"
             className="animated-time"
             transitionName="time"
@@ -27,8 +28,8 @@ class Events extends React.Component {
             <div className="event-time event-attribute">
               {event.date.format("HH:mm")}
             </div>
-          </ReactCSSTransitionGroup>
-          <ReactCSSTransitionGroup
+          </CSSTransitionGroup>
+          <CSSTransitionGroup
             component="div"
             className="animated-title"
             transitionName="title"
@@ -38,7 +39,7 @@ class Events extends React.Component {
             transitionLeaveTimeout={500}
           >
             <div className="event-title event-attribute">{event.title}</div>
-          </ReactCSSTransitionGroup>
+          </CSSTransitionGroup>
         </div>
       );
     });
