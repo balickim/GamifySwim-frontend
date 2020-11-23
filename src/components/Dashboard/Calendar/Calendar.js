@@ -77,7 +77,7 @@ class Calendar extends React.Component {
   renderMonthLabel = () => {
     const currentMonthView = this.state.selectedMonth;
     return (
-      <span className="calendarBox month-label">
+      <span className="calendar-box month-label">
         {currentMonthView.format("MMMM YYYY")}
       </span>
     );
@@ -86,7 +86,7 @@ class Calendar extends React.Component {
   renderDayLabel() {
     const currentSelectedDay = this.state.selectedDay;
     return (
-      <span className="calendarBox month-label">
+      <span className="calendar-box month-label">
         {currentSelectedDay.format("DD MMMM YYYY")}
       </span>
     );
@@ -95,7 +95,7 @@ class Calendar extends React.Component {
   renderTodayLabel = () => {
     const currentSelectedDay = this.state.selectedDay;
     return (
-      <span className="calendarBox today-label" onClick={this.goToCurrentMonthView}>
+      <span className="calendar-box today-label" onClick={this.goToCurrentMonthView}>
         Today
       </span>
     );
@@ -261,11 +261,11 @@ class Calendar extends React.Component {
       dynamic: false
     };
     
-        var event10 = {
+    var event10 = {
       title:
         "Hello World",
       date: moment().startOf("day").add(5, "h"),
-      dynamic: false
+      dynamic: true
     };
 
     allEvents.push(event1);
@@ -295,51 +295,59 @@ class Calendar extends React.Component {
 
     if (showEvents) {
       return (
-        <section className="main-calendar">
-          <header className="calendar-header">
-            <div className="row title-header">
-              {this.renderDayLabel()}
-            </div>
-            <div className="row button-container">
-              <i
-                className="calendarBox arrow fa fa-angle-left"
-                onClick={this.showCalendar}
+        <div className="calendar-rectangle">
+          <div className="calendar-content">
+            <section className="main-calendar">
+              <header className="calendar-header">
+                <div className="calendar-row title-header">
+                  {this.renderDayLabel()}
+                </div>
+                <div className="calendar-row button-container">
+                  <i
+                    className="calendar-box arrow fa fa-angle-left"
+                    onClick={this.showCalendar}
+                  />
+                  <i
+                    className="calendar-box event-button fa fa-plus-square"
+                    onClick={this.addEvent}
+                  />
+                </div>
+              </header>
+              <Events
+                selectedMonth={this.state.selectedMonth}
+                selectedDay={this.state.selectedDay}
+                selectedMonthEvents={this.state.selectedMonthEvents}
+                removeEvent={i => this.removeEvent(i)}
               />
-              <i
-                className="calendarBox event-button fa fa-plus-square"
-                onClick={this.addEvent}
-              />
-            </div>
-          </header>
-          <Events
-            selectedMonth={this.state.selectedMonth}
-            selectedDay={this.state.selectedDay}
-            selectedMonthEvents={this.state.selectedMonthEvents}
-            removeEvent={i => this.removeEvent(i)}
-          />
-        </section>
+            </section>
+          </div>
+        </div>
       );
     } else {
       return (
-        <section className="main-calendar">
-          <header className="calendar-header">
-            <div className="row title-header">
-              <i
-                className="calendarBox arrow fa fa-angle-left"
-                onClick={this.previous}
-              />
-              <div className="calendarBox header-text">
-              {this.renderTodayLabel()}
-              {this.renderMonthLabel()}
+        <div className="calendar-rectangle">
+          <div className="calendar-content">
+            <section className="main-calendar">
+              <header className="calendar-header">
+                <div className="calendar-row title-header">
+                  <i
+                    className="calendar-box arrow fa fa-angle-left"
+                    onClick={this.previous}
+                  />
+                  <div className="calendar-box header-text">
+                  {this.renderTodayLabel()}
+                  {this.renderMonthLabel()}
+                  </div>
+                  <i className="calendar-box arrow fa fa-angle-right" onClick={this.next} />
+                </div>
+                <DayNames />
+              </header>
+              <div className="days-container">
+                {this.renderWeeks()}
               </div>
-              <i className="calendarBox arrow fa fa-angle-right" onClick={this.next} />
-            </div>
-            <DayNames />
-          </header>
-          <div className="days-container">
-            {this.renderWeeks()}
+            </section>
           </div>
-        </section>
+        </div>
       );
     }
   }

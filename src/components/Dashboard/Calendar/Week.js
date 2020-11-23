@@ -33,7 +33,7 @@ class Week extends React.Component {
       date.add(1, "d");
     }
     return (
-      <div className="row week">
+      <div className="calendar-row week">
         {days}
       </div>
     );

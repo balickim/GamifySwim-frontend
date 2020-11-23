@@ -8,11 +8,7 @@ function Home(){
             <div className='content'>
                 <PieChartComponent />
                 <PieChartComponent />
-                <div className="calendar-rectangle">
-                    <div className="calendar-content">
-                    <Calendar />
-                    </div>
-                </div>
+                <Calendar />
                 <ProgressBar />
             </div>
         );
