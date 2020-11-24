@@ -1,4 +1,5 @@
 import React from 'react';
+import { BACKEND } from '../../../config';
 import moment from 'moment';
 import DayNames from './DayNames';
 import Week from './Week';
@@ -17,14 +18,6 @@ class Calendar extends React.Component {
     };
   }
 
-  // SAFE_componentWillMount() {
-  //   this.previous = this.previous.bind(this);
-  //   this.next = this.next.bind(this);
-  //   this.addEvent = this.addEvent.bind(this);
-  //   this.showCalendar = this.showCalendar.bind(this);
-  //   this.goToCurrentMonthView = this.goToCurrentMonthView.bind(this);
-  // }
-
   componentDidMount() {
     this.previous = this.previous.bind(this);
     this.next = this.next.bind(this);
@@ -41,6 +34,8 @@ class Calendar extends React.Component {
     this.setState({
       selectedMonth: currentMonthView.subtract(1, "month")
     });
+
+    this.initialiseEvents();
   }
 
   next = () => {
@@ -49,6 +44,8 @@ class Calendar extends React.Component {
     this.setState({
       selectedMonth: currentMonthView.add(1, "month")
     });
+
+    this.initialiseEvents();
   }
 
   select(day) {
@@ -206,86 +203,27 @@ class Calendar extends React.Component {
 
     let allEvents = [];
 
-    var event1 = {
-      title:
-        "Press the Add button and enter a name for your event. P.S you can delete me by pressing me!",
-      date: moment(),
-      dynamic: false
-    };
+    let year = JSON.stringify(this.state.selectedMonth._d).substr(1,4);
+    let month = this.state.selectedMonth._d.getMonth()+1;
 
-    var event2 = {
-      title: "Event 2 - Meeting",
-      date: moment().startOf("day").subtract(2, "d").add(2, "h"),
-      dynamic: false
-    };
-
-    var event3 = {
-      title: "Event 3 - Cinema",
-      date: moment().startOf("day").subtract(7, "d").add(18, "h"),
-      dynamic: false
-    };
-
-    var event4 = {
-      title: "Event 4 - Theater",
-      date: moment().startOf("day").subtract(16, "d").add(20, "h"),
-      dynamic: false
-    };
-
-    var event5 = {
-      title: "Event 5 - Drinks",
-      date: moment().startOf("day").subtract(2, "d").add(12, "h"),
-      dynamic: false
-    };
-
-    var event6 = {
-      title: "Event 6 - Diving",
-      date: moment().startOf("day").subtract(2, "d").add(13, "h"),
-      dynamic: false
-    };
-
-    var event7 = {
-      title: "Event 7 - Tennis",
-      date: moment().startOf("day").subtract(2, "d").add(14, "h"),
-      dynamic: false
-    };
-
-    var event8 = {
-      title: "Event 8 - Swimmming",
-      date: moment().startOf("day").subtract(2, "d").add(17, "h"),
-      dynamic: false
-    };
-
-    var event9 = {
-      title: "Event 9 - Chilling",
-      date: moment().startOf("day").subtract(2, "d").add(16, "h"),
-      dynamic: false
-    };
-    
-    var event10 = {
-      title:
-        "Hello World",
-      date: moment().startOf("day").add(5, "h"),
-      dynamic: true
-    };
-
-    allEvents.push(event1);
-    allEvents.push(event2);
-    allEvents.push(event3);
-    allEvents.push(event4);
-    allEvents.push(event5);
-    allEvents.push(event6);
-    allEvents.push(event7);
-    allEvents.push(event8);
-    allEvents.push(event9);
-    allEvents.push(event10);
-
-    for (var i = 0; i < allEvents.length; i++) {
-      monthEvents.push(allEvents[i]);
-    }
-
-    this.setState({
-      selectedMonthEvents: monthEvents
-    });
+        const requestOptions = {
+          method: 'POST',
+          body: JSON.stringify({month, year}),
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+      };
+      fetch(`${BACKEND.ADDRESS}/user/trainingsmonth`, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+              for (var i = 0; i < data.trainings.length; i++) {
+                allEvents.push({title: data.trainings[i].title,
+                              date: moment(data.trainings[i].trainingdatestart),
+                              dynamic: false});
+              }
+              this.setState({
+                      selectedMonthEvents: allEvents
+                    });
+              })
   }
 
   render() {
