@@ -216,8 +216,11 @@ class Calendar extends React.Component {
           .then(response => response.json())
           .then(data => {
               for (var i = 0; i < data.trainings.length; i++) {
-                allEvents.push({title: data.trainings[i].title,
+                allEvents.push({id: data.trainings[i].id,
+                              title: data.trainings[i].title,
                               date: moment(data.trainings[i].trainingdatestart),
+                              description: data.trainings[i].description,
+                              pooltitle: data.trainings[i].pooltitle,
                               dynamic: false});
               }
               this.setState({
