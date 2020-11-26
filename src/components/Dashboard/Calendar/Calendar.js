@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BACKEND } from '../../../config';
 import moment from 'moment';
 import DayNames from './DayNames';
@@ -6,73 +6,51 @@ import Week from './Week';
 import Day from './Day';
 import Events from './Events'
 
-class Calendar extends React.Component {
-  constructor(props) {
-    super(props);
+function Calendar(props) {
+  const [selectedMonth,setSelectedMonth] = useState(moment().startOf("month"));
+  const [selectedDay,setSelectedDay] = useState(moment().startOf("day"));
+  const [selectedMonthEvents,setSelectedMonthEvents] = useState([]);
+  const [showEvents,setShowEvents] = useState(false);
 
-    this.state = {
-      selectedMonth: moment().startOf("month"),
-      selectedDay: moment().startOf("day"),
-      selectedMonthEvents: [],
-      showEvents: false
-    };
+  useEffect(()=>{
+    initialiseEvents();
+  },[]) 
+
+  const previous = () => {
+    const currentMonthView = selectedMonth;
+
+    setSelectedMonth(currentMonthView.subtract(1, "month"));
+
+    initialiseEvents();
   }
 
-  componentDidMount() {
-    this.previous = this.previous.bind(this);
-    this.next = this.next.bind(this);
-    this.addEvent = this.addEvent.bind(this);
-    this.showCalendar = this.showCalendar.bind(this);
-    this.goToCurrentMonthView = this.goToCurrentMonthView.bind(this);
+  const next = () => {
+    const currentMonthView = selectedMonth;
 
-    this.initialiseEvents();
+    setSelectedMonth(currentMonthView.add(1, "month"));
+
+    initialiseEvents();
   }
 
-  previous = () => {
-    const currentMonthView = this.state.selectedMonth;
-
-    this.setState({
-      selectedMonth: currentMonthView.subtract(1, "month")
-    });
-
-    this.initialiseEvents();
+  const select = (day) => {
+    setSelectedMonth(day.date);
+    setSelectedDay(day.date.clone());
+    setShowEvents(true);
   }
 
-  next = () => {
-    const currentMonthView = this.state.selectedMonth;
-
-    this.setState({
-      selectedMonth: currentMonthView.add(1, "month")
-    });
-
-    this.initialiseEvents();
-  }
-
-  select(day) {
-    this.setState({
-      selectedMonth: day.date,
-      selectedDay: day.date.clone(),
-      showEvents: true
-    });
-  }
-
-  goToCurrentMonthView(){
-    const currentMonthView = this.state.selectedMonth;
-    this.setState({
-      selectedMonth: moment()
-    });
+  const goToCurrentMonthView = () => {
+    const currentMonthView = selectedMonth;
+    setSelectedMonth(moment());
   }
   
-  showCalendar = () => {
-    this.setState({
-      selectedMonth: this.state.selectedMonth,
-      selectedDay: this.state.selectedDay,
-      showEvents: false
-    });
+  const showCalendar = () => {
+    setSelectedMonth(selectedMonth);
+    setSelectedDay(selectedDay);
+    setShowEvents(false);
   }
 
-  renderMonthLabel = () => {
-    const currentMonthView = this.state.selectedMonth;
+  const renderMonthLabel = () => {
+    const currentMonthView = selectedMonth;
     return (
       <span className="calendar-box month-label">
         {currentMonthView.format("MMMM YYYY")}
@@ -80,8 +58,8 @@ class Calendar extends React.Component {
     );
   }
 
-  renderDayLabel() {
-    const currentSelectedDay = this.state.selectedDay;
+  const renderDayLabel = () => {
+    const currentSelectedDay = selectedDay;
     return (
       <span className="calendar-box month-label">
         {currentSelectedDay.format("DD MMMM YYYY")}
@@ -89,19 +67,19 @@ class Calendar extends React.Component {
     );
   }
   
-  renderTodayLabel = () => {
-    const currentSelectedDay = this.state.selectedDay;
+  const renderTodayLabel = () => {
+    const currentSelectedDay = selectedDay;
     return (
-      <span className="calendar-box today-label" onClick={this.goToCurrentMonthView}>
+      <span className="calendar-box today-label" onClick={goToCurrentMonthView}>
         Today
       </span>
     );
   }
   
-  renderWeeks = () => {
-    const currentMonthView = this.state.selectedMonth;
-    const currentSelectedDay = this.state.selectedDay;
-    const monthEvents = this.state.selectedMonthEvents;
+  const renderWeeks = () => {
+    const currentMonthView = selectedMonth;
+    const currentSelectedDay = selectedDay;
+    const monthEvents = selectedMonthEvents;
 
     let weeks = [];
     let done = false;
@@ -120,7 +98,7 @@ class Calendar extends React.Component {
           currentMonthView={currentMonthView}
           monthEvents={monthEvents}
           selected={currentSelectedDay}
-          select={day => this.select(day)}
+          select={day => select(day)}
         />
       );
       previousCurrentNextView.add(1, "w");
@@ -130,9 +108,9 @@ class Calendar extends React.Component {
     return weeks;
   }
 
-  handleAdd = () => {
-    const monthEvents = this.state.selectedMonthEvents;
-    const currentSelectedDate = this.state.selectedDay;
+  const handleAdd = () => {
+    const monthEvents = selectedMonthEvents;
+    const currentSelectedDate = selectedDay;
 
     let newEvents = [];
 
@@ -157,31 +135,28 @@ class Calendar extends React.Component {
         for (var i = 0; i < newEvents.length; i++) {
           monthEvents.push(newEvents[i]);
         }
-
-        this.setState({
-          selectedMonthEvents: monthEvents
-        });
+        setSelectedMonthEvents(monthEvents);
         break;
     }
   }
 
-  addEvent = () => {
-    const currentSelectedDate = this.state.selectedDay;
+  const addEvent = () => {
+    const currentSelectedDate = selectedDay;
     let isAfterDay = moment().startOf("day").subtract(1, "d");
 
     if (currentSelectedDate.isAfter(isAfterDay)) {
-      this.handleAdd();
+      handleAdd();
     } else {
       if (confirm("Are you sure you want to add an event in the past?")) {
-        this.handleAdd();
+        handleAdd();
       } else {
       } // end confirm past
     } //end is in the past
   }
 
-  removeEvent(i) {
-    const monthEvents = this.state.selectedMonthEvents.slice();
-    const currentSelectedDate = this.state.selectedDay;
+  const removeEvent = (i) => {
+    const monthEvents = selectedMonthEvents.slice();
+    const currentSelectedDate = selectedDay;
 
     if (confirm("Are you sure you want to remove this event?")) {
       let index = i;
@@ -191,20 +166,17 @@ class Calendar extends React.Component {
       } else {
         alert("No events to remove on this day!");
       }
-
-      this.setState({
-        selectedMonthEvents: monthEvents
-      });
+      setSelectedMonthEvents(monthEvents);
     }
   }
 
-  initialiseEvents = () => {
-    const monthEvents = this.state.selectedMonthEvents;
+  const initialiseEvents = () => {
+    const monthEvents = selectedMonthEvents;
 
     let allEvents = [];
 
-    let year = JSON.stringify(this.state.selectedMonth._d).substr(1,4);
-    let month = this.state.selectedMonth._d.getMonth()+1;
+    let year = JSON.stringify(selectedMonth._d).substr(1,4);
+    let month = selectedMonth._d.getMonth()+1;
 
         const requestOptions = {
           method: 'POST',
@@ -223,16 +195,13 @@ class Calendar extends React.Component {
                               pooltitle: data.trainings[i].pooltitle,
                               dynamic: false});
               }
-              this.setState({
-                      selectedMonthEvents: allEvents
-                    });
+                setSelectedMonthEvents(allEvents);
               })
   }
 
-  render() {
-    const currentMonthView = this.state.selectedMonth;
-    const currentSelectedDay = this.state.selectedDay;
-    const showEvents = this.state.showEvents;
+    const currentMonthView = selectedMonth;
+    const currentSelectedDay = selectedDay;
+    // const showEvents = showEvents;
 
     if (showEvents) {
       return (
@@ -241,24 +210,24 @@ class Calendar extends React.Component {
             <section className="main-calendar">
               <header className="calendar-header">
                 <div className="calendar-row title-header">
-                  {this.renderDayLabel()}
+                  {renderDayLabel()}
                 </div>
                 <div className="calendar-row button-container">
                   <i
                     className="calendar-box arrow fa fa-angle-left"
-                    onClick={this.showCalendar}
+                    onClick={showCalendar}
                   />
                   <i
                     className="calendar-box event-button fa fa-plus-square"
-                    onClick={this.addEvent}
+                    onClick={addEvent}
                   />
                 </div>
               </header>
               <Events
-                selectedMonth={this.state.selectedMonth}
-                selectedDay={this.state.selectedDay}
-                selectedMonthEvents={this.state.selectedMonthEvents}
-                removeEvent={i => this.removeEvent(i)}
+                selectedMonth={selectedMonth}
+                selectedDay={selectedDay}
+                selectedMonthEvents={selectedMonthEvents}
+                removeEvent={i => removeEvent(i)}
               />
             </section>
           </div>
@@ -273,25 +242,24 @@ class Calendar extends React.Component {
                 <div className="calendar-row title-header">
                   <i
                     className="calendar-box arrow fa fa-angle-left"
-                    onClick={this.previous}
+                    onClick={previous}
                   />
                   <div className="calendar-box header-text">
-                  {this.renderTodayLabel()}
-                  {this.renderMonthLabel()}
+                  {renderTodayLabel()}
+                  {renderMonthLabel()}
                   </div>
-                  <i className="calendar-box arrow fa fa-angle-right" onClick={this.next} />
+                  <i className="calendar-box arrow fa fa-angle-right" onClick={next} />
                 </div>
                 <DayNames />
               </header>
               <div className="days-container">
-                {this.renderWeeks()}
+                {renderWeeks()}
               </div>
             </section>
           </div>
         </div>
       );
     }
-  }
 }
 
 export default Calendar
