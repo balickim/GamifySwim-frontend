@@ -1,7 +1,6 @@
 import React from 'react';
 
-class DayNames extends React.Component {
-  render() {
+function DayNames() {
     return (
       <div className="calendar-row days-header">
         <span className="calendar-box day-name">Pon</span>
@@ -13,7 +12,6 @@ class DayNames extends React.Component {
         <span className="calendar-box day-name">Nie</span>
       </div>
     );
-  }
 }
 
 export default DayNames;

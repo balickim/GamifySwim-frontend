@@ -1,14 +1,13 @@
 import React from 'react';
 import Day from './Day';
 
-class Week extends React.Component {
-  render() {
+function Week(props) {
     let days = [];
-    let date = this.props.previousCurrentNextView;
-    let currentMonthView = this.props.currentMonthView;
-    let selected = this.props.selected;
-    let select = this.props.select;
-    let monthEvents = this.props.monthEvents;
+    let date = props.previousCurrentNextView;
+    let currentMonthView = props.currentMonthView;
+    let selected = props.selected;
+    let select = props.select;
+    let monthEvents = props.monthEvents;
 
     for (var i = 0; i < 7; i++) {
       var dayHasEvents = false;
@@ -37,7 +36,6 @@ class Week extends React.Component {
         {days}
       </div>
     );
-  }
 }
 
 export default Week;
