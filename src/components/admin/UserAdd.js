@@ -6,38 +6,19 @@ import fetchStates from '../../reducers/fetchStates';
 
 function UserAdd(props) {
     const [username, setUsername] = useState();
-    const [password, setPassword] = useState(true);
+    const [password, setPassword] = useState();
+    const [role, setRole] = useState();
     const [name, setName] = useState();
     const [secondname, setSecondName] = useState();
     const [surname, setSurname] = useState();
     const [buttonClicked, setButtonClicked] = useState(false);
 
-    function updateUsername(event) {
-        setUsername(event.target.value);
-    }
-
-    function updatePassword(event) {
-        setPassword(event.target.value);
-    }
-
-    function updateName(event) {
-        setName(event.target.value);
-    }
-
-    function updateSecondName(event) {
-        setSecondName(event.target.value);
-    }
-
-    function updateSurname(event) {
-        setSurname(event.target.value);
-    }
-
     function signup() { 
         setButtonClicked(true);
 
-        props.signup({ username, password, name, secondname, surname });
+        props.signup({ username, password, role, name, secondname, surname });
     }
-
+    
     // Error() {
     //     if (
     //         this.state.buttonClicked &&
@@ -46,69 +27,66 @@ function UserAdd(props) {
     //     }
     // }
 
-    // handleChange = (event) => {
-    //     const input = event.target;
-    
-    //     this.setState({ [input.name]: value });
-    // };  
-
-        return (
-            <div>
-                <div className="box">
-                    <Form>
-                        <FormGroup className="inputBox">
-                            <FormControl
-                                autoFocus={true}
-                                // onKeyPress={this.onKeyPress}
-                                type='text'
-                                placeholder='Twoja nazwa użytkownika'
-                                onChange={updateUsername}
-                            />
-                        </FormGroup>
-                        <FormGroup className="inputBox">
-                            <FormControl
-                                // onKeyPress={this.onKeyPress}
-                                type='password'
-                                placeholder='oraz hasło'
-                                onChange={updatePassword}
-                            />
-                        </FormGroup>
-                        <FormGroup className="inputBox">
-                            <FormControl
-                                // onKeyPress={this.onKeyPress}
-                                type='text'
-                                placeholder='Imię'
-                                onChange={updateName}
-                            />
-                        </FormGroup>
-                        <FormGroup className="inputBox">
-                            <FormControl
-                                // onKeyPress={this.onKeyPress}
-                                type='text'
-                                placeholder='Drugie imię'
-                                onChange={updateSecondName}
-                            />
-                        </FormGroup>
-                        <FormGroup className="inputBox">
-                            <FormControl
-                                // onKeyPress={this.onKeyPress}
-                                type='text'
-                                placeholder='nazwisko'
-                                onChange={updateSurname}
-                            />
-                        </FormGroup>
-                        <div style={{ textAlign: "center" }}>
-                            <Button id='loginButton' 
-                            onClick={signup}
-                            >Dodaj</Button>
-                        </div>
-                    </Form>
-                    <br />
-                    {/* {this.Error} */}
+    return (
+        <div>
+            <Form>
+                <FormGroup>
+                    <FormControl
+                        type='text'
+                        placeholder='Login'
+                        onChange={e => setUsername(e.target.value)}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <FormControl
+                        type='text'
+                        placeholder='Hasło'
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <FormControl 
+                        as="select"
+                        onChange={e => setRole(e.target.value)}
+                        >
+                            <option>Wybierz...</option>
+                            <option value={1}>Administrator</option>
+                            <option value={2}>Zawodnik</option>
+                            <option value={3}>Trener</option>
+                    </FormControl>
+                </FormGroup>
+                <FormGroup>
+                    <FormControl
+                        type='text'
+                        placeholder='Imię'
+                        onChange={e => setName(e.target.value)}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <FormControl
+                        type='text'
+                        placeholder='Drugie imię'
+                        onChange={e => setSecondName(e.target.value)}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <FormControl
+                        type='text'
+                        placeholder='Nazwisko'
+                        onChange={e => setSurname(e.target.value)}
+                    />
+                </FormGroup>
+                <div style={{ textAlign: "center" }}>
+                    <Button id='loginButton' 
+                    onClick={signup}
+                    >Dodaj</Button>
                 </div>
-            </div>
-        );
-    }
+            </Form>
+            <br />
+            {/* {this.Error} */}
+        </div>
+    );
+}
 
 export default connect(
     ({ account }) => ({ account }),
