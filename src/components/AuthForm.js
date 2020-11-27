@@ -4,6 +4,7 @@ import { Button, FormGroup, FormControl, Form, FormCheck } from 'react-bootstrap
 import { login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
 import { FaSignInAlt } from 'react-icons/fa';
+import Helper from './Helper';
 
 class AuthForm extends Component {
     state = { username: '', password: '', shortname: '', buttonClicked: false, rememberMe: false };
@@ -25,6 +26,8 @@ class AuthForm extends Component {
 
     login = () => {
         this.setState({ buttonClicked: true });
+
+        Helper.addCSS("body{ cursor: wait; }")
 
         const { username, password, shortname, rememberMe } = this.state;
 
