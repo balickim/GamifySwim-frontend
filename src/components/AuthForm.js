@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, FormGroup, FormControl, Form } from 'react-bootstrap';
+import { Button, FormGroup, FormControl, Form, FormCheck } from 'react-bootstrap';
 import { login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
 import { FaSignInAlt } from 'react-icons/fa';
 
-function AuthForm(props) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [shortname, setShortname] = useState('');
-    const [buttonClicked, setButtonClicked] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
-    const [inputName, setInputName] = useState(false);
+class AuthForm extends Component {
+    state = { username: '', password: '', shortname: '', buttonClicked: false, rememberMe: false };
 
-    const updateUsername = (event) => {
-        setUsername(event.target.value);
-    };
+    updateUsername = event => {
 
-    const updatePassword = (event) => {
-        setPassword(event.target.value);
-    };
+        this.setState({ username: event.target.value });
+    }
 
-    const updateShortname = (event) => {
-        setShortname(event.target.value);
-    };
+    updatePassword = event => {
 
-    const login = () => {
-        setButtonClicked(true);
+        this.setState({ password: event.target.value });
+    }
 
-        // const { username, password, shortname, rememberMe } = state;
+    updateShortname = event => {
 
-        props.login({ username, password, shortname })
+        this.setState({ shortname: event.target.value });
+    }
+
+    login = () => {
+        this.setState({ buttonClicked: true });
+
+        const { username, password, shortname, rememberMe } = this.state;
+
+        this.props.login({ username, password, shortname })
             .then(() => {
                 location.replace("./home");
             });
@@ -41,84 +39,93 @@ function AuthForm(props) {
         localStorage.setItem('shortname', rememberMe ? shortname : '');
     }
 
-    const Error = () => {
+    // signup = () => { //in future will not be used
+    //     this.setState({ buttonClicked: true });
+
+    //     const { username, password, shortname } = this.state;
+
+    //     this.props.signup({ username, password, shortname });
+    // }
+
+    get Error() {
         if (
-            buttonClicked &&
-            props.account.status === fetchStates.error) {
-            return <div className="AuthFormError">{props.account.message}</div>
+            this.state.buttonClicked &&
+            this.props.account.status === fetchStates.error) {
+            return <div className="AuthFormError">{this.props.account.message}</div>
         }
     }
 
-    const onKeyPress = (e) => {
+    onKeyPress = (e) => {
         if (e.which === 13) {
             document.getElementById("loginButton").click();
-            login();
+            this.login();
         }
     }
 
-    const handleChange = (event) => {
+    handleChange = (event) => {
         const input = event.target;
         const value = input.type === 'checkbox' ? input.checked : input.value;
-        // [${input.name}]: value
-        // setState({ [input.name]: value });
+    
+        this.setState({ [input.name]: value });
     };
 
-    useEffect(()=>{
+    componentDidMount() {
         const rememberMe = localStorage.getItem('rememberMe') === 'true';
         const username = rememberMe ? localStorage.getItem('username') : '';
         const password = rememberMe ? localStorage.getItem('password') : '';
         const shortname = rememberMe ? localStorage.getItem('shortname') : '';
-        // setState({ username, password, shortname, rememberMe });
-    },[])
+        this.setState({ username, password, shortname, rememberMe });
+    };   
 
-    return (
-        <div className="AuthFormComponent">
-            <div className="box">
-                <Form onKeyPress={onKeyPress}>
-                    <FormGroup className="inputBox">
-                        <FormControl
-                            autoFocus={true}
-                            onKeyPress={onKeyPress}
-                            type='text'
-                            value={username}
-                            placeholder='Twoja nazwa użytkownika'
-                            onChange={updateUsername}
-                        />
-                    </FormGroup>
-                    <FormGroup className="inputBox">
-                        <FormControl
-                            onKeyPress={onKeyPress}
-                            type='password'
-                            value={password}
-                            placeholder='oraz hasło'
-                            onChange={updatePassword}
-                        />
-                    </FormGroup>
-                    <FormGroup className="inputBox">
-                        <FormControl
-                            name='shortname'
-                            onKeyPress={onKeyPress}
-                            value={shortname}
-                            placeholder='i skrócona nazwa Twojej szkoły'
-                            onChange={updateShortname}
-                            // onChange={updateShortname, handleChange}
-                        />
-                    </FormGroup>
-                    <div style={{ textAlign: "center" }}>
-                        <Button id='loginButton' onClick={login}>Zaloguj <FaSignInAlt /> </Button>
-                    </div>
-                    <input 
-                        name="rememberMe" 
-                        checked={rememberMe} 
-                        onChange={handleChange} 
-                        type="checkbox"/> 
-                            Zapamiętaj mnie
-                </Form>
-                <br />
-                {Error}
+    render() {
+        return (
+            <div className="AuthFormComponent">
+                <div className="box">
+                    <Form onKeyPress={this.onKeyPress}>
+                        <FormGroup className="inputBox">
+                            <FormControl
+                                autoFocus={true}
+                                onKeyPress={this.onKeyPress}
+                                type='text'
+                                value={this.state.username}
+                                placeholder='Twoja nazwa użytkownika'
+                                onChange={this.updateUsername}
+                            />
+                        </FormGroup>
+                        <FormGroup className="inputBox">
+                            <FormControl
+                                onKeyPress={this.onKeyPress}
+                                type='password'
+                                value={this.state.password}
+                                placeholder='oraz hasło'
+                                onChange={this.updatePassword}
+                            />
+                        </FormGroup>
+                        <FormGroup className="inputBox">
+                            <FormControl
+                                name='shortname'
+                                onKeyPress={this.onKeyPress}
+                                value={this.state.shortname}
+                                placeholder='i skrócona nazwa Twojej szkoły'
+                                onChange={this.updateShortname, this.handleChange}
+                            />
+                        </FormGroup>
+                        <div style={{ textAlign: "center" }}>
+                            <Button id='loginButton' onClick={this.login}>Zaloguj <FaSignInAlt /> </Button>
+                        </div>
+                        <input 
+                            name="rememberMe" 
+                            checked={this.state.rememberMe} 
+                            onChange={this.handleChange} 
+                            type="checkbox"/> 
+                             Zapamiętaj mnie
+                    </Form>
+                    <br />
+                    {this.Error}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default connect(
