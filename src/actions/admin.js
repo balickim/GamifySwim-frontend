@@ -24,15 +24,15 @@ export const fetchFromAccount = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE, SU
         });
 };
 
-export const signup = ({ username, password, role, name, secondname, surname }) => fetchFromAccount({
+export const signup = ({ username, password, role, name, secondname, surname, birthdate, gender, deleted }) => fetchFromAccount({
     endpoint: 'signup',
     options: {
         method: 'POST',
-        body: JSON.stringify({ username, password, roleId: role, name, secondname, surname }),
+        body: JSON.stringify({ username, password, roleId: role, name, secondname, surname, birthdate, gender, deleted }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
     },
     FETCH_TYPE: ACCOUNT.FETCH,
     ERROR_TYPE: ACCOUNT.FETCH_ERROR,
-    SUCCESS_TYPE: ACCOUNT.FETCH_SUCCESS
+    SUCCESS_TYPE: ACCOUNT.ADD_SUCCESS
 });

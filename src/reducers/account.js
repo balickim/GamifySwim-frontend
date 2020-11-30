@@ -9,6 +9,8 @@ const account = (state = DEFAULT_ACCOUNT, action) => {
             return { ...state, status: fetchStates.fetching };
         case ACCOUNT.FETCH_ERROR:
             return { ...state, status: fetchStates.error, message: action.message }
+        case ACCOUNT.ADD_SUCCESS:
+            return { ...state, status: fetchStates.error, message: action.message };
         case ACCOUNT.FETCH_SUCCESS:
             return { ...state, status: fetchStates.success, message: action.message, roleId: action.roleId, loggedIn: true};
         case ACCOUNT.FETCH_LOGOUT_SUCCESS:
