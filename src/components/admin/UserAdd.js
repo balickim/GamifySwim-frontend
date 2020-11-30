@@ -33,7 +33,7 @@ class UserAdd extends React.Component {
         if (this.state.buttonClicked){
             if (this.props.account.status === fetchStates.error) {
                 return <div className="AuthFormError">{this.props.account.message}</div>
-            } else {
+            } else if (this.props.account.status === fetchStates.success) {
                 return <div className="alert alert-success">{this.props.account.message}</div>
             }
         }
