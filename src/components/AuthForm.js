@@ -4,6 +4,7 @@ import { Button, FormGroup, FormControl, Form, FormCheck } from 'react-bootstrap
 import { login } from '../actions/account';
 import fetchStates from '../reducers/fetchStates';
 import { FaSignInAlt } from 'react-icons/fa';
+import { osName, osVersion, fullBrowserVersion, isMobile, getUA, deviceType } from "react-device-detect";
 import Helper from './Helper';
 
 class AuthForm extends Component {
@@ -31,7 +32,9 @@ class AuthForm extends Component {
 
         const { username, password, shortname, rememberMe } = this.state;
 
-        this.props.login({ username, password, shortname })
+        let deviceinfo = {osName, osVersion, fullBrowserVersion, isMobile, getUA, deviceType};
+
+        this.props.login({ username, password, shortname, deviceinfo })
             .then(() => {
                 location.replace("./home");
             });
@@ -41,14 +44,6 @@ class AuthForm extends Component {
         localStorage.setItem('password', rememberMe ? password : '');
         localStorage.setItem('shortname', rememberMe ? shortname : '');
     }
-
-    // signup = () => { //in future will not be used
-    //     this.setState({ buttonClicked: true });
-
-    //     const { username, password, shortname } = this.state;
-
-    //     this.props.signup({ username, password, shortname });
-    // }
 
     get Error() {
         if (

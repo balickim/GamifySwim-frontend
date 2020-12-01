@@ -24,11 +24,11 @@ export const fetchFromAccount = ({ endpoint, options, FETCH_TYPE, ERROR_TYPE, SU
         });
 };
 
-export const login = ({ username, password, shortname }) => fetchFromAccount({
+export const login = ({ username, password, shortname, deviceinfo }) => fetchFromAccount({
     endpoint: 'login',
     options: {
         method: 'POST',
-        body: JSON.stringify({ username, password, shortname }),
+        body: JSON.stringify({ username, password, shortname, deviceinfo }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
     },
