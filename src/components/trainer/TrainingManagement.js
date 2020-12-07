@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import TrainingAdd from './TrainingAdd';
+import PoolAdd from './PoolAdd';
 
 function TrainingManagement(){
         return (
@@ -9,7 +10,7 @@ function TrainingManagement(){
                     <Container>
                     <Row>
                         <Col sm={4}><h3>Dodaj trening</h3><TrainingAdd /></Col>
-                        {/* <Col sm={4}><UsersTable /></Col> */}
+                        <Col sm={4}><h3>Dodaj basen</h3><PoolAdd /></Col>
                     </Row>
                     <Row>
                         {/* <Col sm={4}><h3>Dodaj użytkownika</h3><UserAdd /></Col> */}
