@@ -12,7 +12,7 @@ import './index.css';
 import AuthForm from './components/AuthForm';
 import Home from './components/Dashboard/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Trainings from './components/Trainings';
+import TrainingManagement from './components/trainer/TrainingManagement';
 import Navigation from './components/Navigation';
 import Designer from './stimulsoft/Designer';
 import Contestants from './components/Contestants';
@@ -53,7 +53,7 @@ store.dispatch(fetchAuthenticated())
                             <div className='content'>
                                 <Navigation/>
                                     <AuthRoute exact path='/home' component={Home} />
-                                    {authorize(2) ? <AuthRoute exact path='/trainings' component={Trainings}/> : null }
+                                    {authorize(3) ? <AuthRoute exact path='/trainingmanagement' component={TrainingManagement}/> : null }
                                     {authorize(1) ? <AuthRoute exact path='/contestants' component={Contestants}/> : null }
                                     {authorize(1) ? <AuthRoute exact path='/usermanagement' component={UserManagement}/> : null }
                             </div>
