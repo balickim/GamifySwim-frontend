@@ -181,7 +181,9 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
   }, [setInitialState, debouncedState])
 
   const cellClickHandler = (cell: Cell<T>) => () => {
-    onClick && cell.column.id !== '_selector' && onClick(cell.row)
+    // onClick && cell.column.id !== '_selector' && onClick(cell.row)
+    if (cell.column.id !== '_selector')
+    props.handleShow(cell.row)
   }
 
   return (
@@ -237,7 +239,6 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
                   {...row.getRowProps()} 
                   className={cx(classes.tableRow, 
                   { rowSelected: row.isSelected })} 
-                  onClick={()=>props.handleShow(row)}
                 >
                   {row.cells.map((cell) => {
                     return (

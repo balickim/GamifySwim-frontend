@@ -164,73 +164,6 @@ function NumberRangeColumnFilter({
   )
 }
 
-const columns = [
-  {
-    Header: 'Name',
-    columns: [
-      {
-        Header: 'Imię',
-        accessor: 'name',
-        width: 100,
-        minWidth: 50,
-        aggregate: 'count',
-        Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
-      },
-      {
-        Header: 'Nazwisko',
-        accessor: 'surname',
-        width: 100,
-        minWidth: 50,
-        aggregate: 'uniqueCount',
-        filter: 'fuzzyText',
-        Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
-      },
-    ],
-  },
-  {
-    Header: 'Info',
-    columns: [
-      {
-        Header: 'Data urodzenia',
-        accessor: 'birthdate',
-        width: 250,
-        minWidth: 50,
-        align: 'right',
-        Filter: SliderColumnFilter,
-        filter: 'equals',
-        aggregate: 'average',
-        disableGroupBy: true,
-        Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (avg)`,
-      },
-      {
-        Header: 'Visits',
-        accessor: 'visits',
-        width: 50,
-        minWidth: 50,
-        align: 'right',
-        Filter: NumberRangeColumnFilter,
-        filter: 'between',
-        aggregate: 'sum',
-        Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (total)`,
-      },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        Filter: SelectColumnFilter,
-        filter: 'includes',
-      },
-      {
-        Header: 'Profile Progress',
-        accessor: 'progress',
-        Filter: SliderColumnFilter,
-        filter: filterGreaterThan,
-        aggregate: roundedMedian,
-        Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (med)`,
-      },
-    ],
-  },
-].flatMap((c:any)=>c.columns) // remove comment to drop header groups
-
 const Contestants: React.FC = () => {
     const [id, setId] = useState(0);
     const [data, setData] = useState();
@@ -258,6 +191,77 @@ const Contestants: React.FC = () => {
           });
     }, []);
 
+    const columns = [
+      {
+        Header: 'Name',
+        columns: [
+          {
+            Header: 'Imię',
+            accessor: 'name',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'count',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
+          },
+          {
+            Header: 'Nazwisko',
+            accessor: 'surname',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'uniqueCount',
+            filter: 'fuzzyText',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+          },
+        ],
+      },
+      {
+        Header: 'Info',
+        columns: [
+          {
+            Header: 'Data urodzenia',
+            accessor: 'birthdate',
+            width: 100,
+            minWidth: 50,
+            align: 'right',
+            Filter: SliderColumnFilter,
+            filter: 'equals',
+            aggregate: 'average',
+            disableGroupBy: true,
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (avg)`,
+          },
+          {
+            Header: 'Visits',
+            accessor: 'visits',
+            width: 50,
+            minWidth: 50,
+            align: 'right',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            aggregate: 'sum',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (total)`,
+          },
+          {
+            Header: 'Status',
+            accessor: 'status',
+            width: 50,
+            minWidth: 50,
+            Filter: SelectColumnFilter,
+            filter: 'includes',
+          },
+          {
+            Header: 'Profile Progress',
+            accessor: 'progress',
+            width: 50,
+            minWidth: 50,
+            Filter: SliderColumnFilter,
+            filter: filterGreaterThan,
+            aggregate: roundedMedian,
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (med)`,
+          },
+        ],
+      },
+    ].flatMap((c:any)=>c.columns) // remove comment to drop header groups
+
     if(isLoading) return (
       <div className="d-flex justify-content-center">
         <img src={Swimmer} width="500" height="600"/>
@@ -275,7 +279,7 @@ const Contestants: React.FC = () => {
 
       <Page>
       {/* <CssBaseline /> */}
-      <Table
+      <Table<PersonData>
         handleShow={handleShow} 
         columns={columns}
         data={data.contestants} 
