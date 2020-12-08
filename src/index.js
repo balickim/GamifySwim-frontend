@@ -6,7 +6,6 @@ import { render } from 'react-dom';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import history from './history';
-// import Root from './components/Root';
 import { fetchAuthenticated } from './actions/account';
 import './index.css';
 import AuthForm from './components/AuthForm';
@@ -15,7 +14,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import TrainingManagement from './components/trainer/TrainingManagement';
 import Navigation from './components/Navigation';
 import Designer from './stimulsoft/Designer';
-import Contestants from './components/Contestants';
 import PermissionDenied from './components/PermissionDenied';
 import UserManagement from './components/admin/UserManagement';
 
@@ -54,7 +52,6 @@ store.dispatch(fetchAuthenticated())
                                 <Navigation/>
                                     <AuthRoute exact path='/home' component={Home} />
                                     {authorize(3) ? <AuthRoute exact path='/trainingmanagement' component={TrainingManagement}/> : null }
-                                    {authorize(1) ? <AuthRoute exact path='/contestants' component={Contestants}/> : null }
                                     {authorize(1) ? <AuthRoute exact path='/usermanagement' component={UserManagement}/> : null }
                             </div>
                         </Fragment>

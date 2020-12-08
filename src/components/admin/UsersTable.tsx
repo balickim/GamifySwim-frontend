@@ -2,12 +2,12 @@ import { Button, CssBaseline, InputLabel, MenuItem, TextField } from '@material-
 import React, { useState, useEffect, useCallback } from 'react';
 import { CellProps, FilterProps, FilterValue, IdType, Row } from 'react-table'
 import { Modal } from 'react-bootstrap';
-import { BACKEND } from '../config';
-import { Page } from './Table/Page';
-import { Table } from './Table/Table/Table';
-import { PersonData, makeData } from './Table/utils';
-import ContestantInfo from './ContestantInfo';
-import Swimmer from '../assets/swimmer.gif';
+import { BACKEND } from '../../config';
+import { Page } from './../Table/Page';
+import { Table } from './../Table/Table/Table';
+import { PersonData, makeData } from './../Table/utils';
+import ContestantInfo from './../ContestantInfo';
+import Swimmer from '../../assets/swimmer.gif';
 
 function roundedMedian(values: any[]) {
   let min = values[0] || ''
@@ -160,7 +160,7 @@ function NumberRangeColumnFilter({
   )
 }
 
-const Contestants: React.FC = () => {
+const UsersTable: React.FC = () => {
     const [id, setId] = useState(0);
     const [data, setData] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -285,4 +285,4 @@ const Contestants: React.FC = () => {
   );
 }
 
-export default Contestants
+export default UsersTable
