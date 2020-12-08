@@ -175,11 +175,11 @@ const UsersTable: React.FC = () => {
 
     useEffect(() => {
       const requestOptions = {
-          method: 'POST',
+          method: 'GET',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include'
       };
-      fetch(`${BACKEND.ADDRESS}/user/contestants`, requestOptions)
+      fetch(`${BACKEND.ADDRESS}/admin/accounts`, requestOptions)
           .then(response => response.json())
           .then(data => {
               setData(data);
@@ -278,7 +278,7 @@ const UsersTable: React.FC = () => {
       <Table<PersonData>
         handleShow={handleShow} 
         columns={columns}
-        data={data.contestants} 
+        data={data.accounts} 
       />
       </Page>
     </div>
