@@ -1,15 +1,11 @@
 import { Button, CssBaseline, InputLabel, MenuItem, TextField } from '@material-ui/core'
 import React, { useState, useEffect, useCallback } from 'react';
 import { CellProps, FilterProps, FilterValue, IdType, Row } from 'react-table'
-
 import { Modal } from 'react-bootstrap';
 import { BACKEND } from '../config';
-// import Table from './Table';
-
-import { Page } from './Page';
-import { Table } from './Table/Table';
-import { PersonData, makeData } from './utils';
-
+import { Page } from './Table/Page';
+import { Table } from './Table/Table/Table';
+import { PersonData, makeData } from './Table/utils';
 import ContestantInfo from './ContestantInfo';
 import Swimmer from '../assets/swimmer.gif';
 
