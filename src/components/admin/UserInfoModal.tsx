@@ -6,8 +6,6 @@ import { BACKEND } from '../../config';
 import { Page } from './../Table/Page';
 import { Table } from './../Table/Table/Table';
 import { PersonData, makeData } from './../Table/utils';
-// import ContestantInfo from './../ContestantInfo';
-import UserInfoModal from './UserInfoModal';
 import Swimmer from '../../assets/swimmer.gif';
 
 function roundedMedian(values: any[]) {
@@ -161,32 +159,25 @@ function NumberRangeColumnFilter({
   )
 }
 
-const UsersTable: React.FC = (props) => {
-    const [id, setId] = useState(0);
-    const [data, setData] = useState();
-    const [isLoading, setIsLoading] = useState(true);
-    const [show, setShow] = useState(false);
+const UserInfoModal: React.FC = (props) => {
+	const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [id, setId] = useState(props.id);
 
-    const handleClose = () => setShow(false);
-
-    function handleShow(row){
-        setShow(true);
-        setId(row.original.id); 
-    }
-
-    useEffect(() => {
-      const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include'
-      };
-      fetch(`${BACKEND.ADDRESS}/admin/accounts`, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-              setData(data);
-              setIsLoading(false);
-          });
-    }, []);
+  useEffect(() => {
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({account_id: id}),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    };
+    fetch(`${BACKEND.ADDRESS}/admin/accountsessionhistory`, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setData(data);
+            setIsLoading(false);
+        });
+  }, []);
 
     const columns = [
       {
@@ -194,7 +185,7 @@ const UsersTable: React.FC = (props) => {
         columns: [
           {
             Header: 'Imię',
-            accessor: 'name',
+            accessor: 'sessionid',
             width: 100,
             minWidth: 50,
             aggregate: 'count',
@@ -202,7 +193,25 @@ const UsersTable: React.FC = (props) => {
           },
           {
             Header: 'Nazwisko',
-            accessor: 'surname',
+            accessor: 'sessiondatestart',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'uniqueCount',
+            filter: 'fuzzyText',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+          },
+					{
+            Header: 'Nazwisko',
+            accessor: 'sessiondatestop',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'uniqueCount',
+            filter: 'fuzzyText',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+          },
+					{
+            Header: 'Nazwisko',
+            accessor: 'deviceinfo',
             width: 100,
             minWidth: 50,
             aggregate: 'uniqueCount',
@@ -210,53 +219,7 @@ const UsersTable: React.FC = (props) => {
             Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
           },
         ],
-      },
-      {
-        Header: 'Info',
-        columns: [
-          {
-            Header: 'Data urodzenia',
-            accessor: 'birthdate',
-            width: 100,
-            minWidth: 50,
-            align: 'right',
-            Filter: SliderColumnFilter,
-            filter: 'equals',
-            aggregate: 'average',
-            disableGroupBy: true,
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (avg)`,
-          },
-          {
-            Header: 'Visits',
-            accessor: 'visits',
-            width: 50,
-            minWidth: 50,
-            align: 'right',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            aggregate: 'sum',
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (total)`,
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-            width: 50,
-            minWidth: 50,
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
-            width: 50,
-            minWidth: 50,
-            Filter: SliderColumnFilter,
-            filter: filterGreaterThan,
-            aggregate: roundedMedian,
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (med)`,
-          },
-        ],
-      },
+      }
     ].flatMap((c:any)=>c.columns) // remove comment to drop header groups
 
     if(isLoading) return (
@@ -266,27 +229,18 @@ const UsersTable: React.FC = (props) => {
     );
     if(!isLoading) return (
       <div style={{padding: '2%'}}>
-        <Modal show={show} onHide={handleClose} size='lg'>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Historia logowań użytkownika
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <UserInfoModal id={id} />
-        </Modal.Body>
-      </Modal>
+        {/* <div ><h2> Imię: </h2><h2>{data.contestant.name}</h2></div>
+				<div ><h2> Nazwisko: </h2><h2>{data.contestant.surname}</h2></div> */}
 
       <Page>
       {/* <CssBaseline /> */}
       <Table<PersonData>
-        handleShow={handleShow} 
         columns={columns}
-        data={data.accounts} 
+        data={data.sessionhistory} 
       />
       </Page>
     </div>
   );
 }
 
-export default UsersTable
+export default UserInfoModal
