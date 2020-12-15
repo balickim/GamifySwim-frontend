@@ -6,8 +6,8 @@ import { BACKEND } from '../../config';
 import { Page } from './../Table/Page';
 import { Table } from './../Table/Table/Table';
 import { PersonData, makeData } from './../Table/utils';
-import TrainingInfoModal from './TrainingInfoModal';
 import Swimmer from '../../assets/swimmer.gif';
+import Helper from '../Helper';
 
 function roundedMedian(values: any[]) {
   let min = values[0] || ''
@@ -160,78 +160,55 @@ function NumberRangeColumnFilter({
   )
 }
 
-const TrainingsTable: React.FC = (props) => {
-    const [id, setId] = useState(0);
-    const [data, setData] = useState();
-    const [isLoading, setIsLoading] = useState(true);
-    const [show, setShow] = useState(false);
+const TrainingInfoModal: React.FC = (props) => {
+	const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
-    const handleClose = () => setShow(false);
-
-    function cellClickHandlerUp(cell){
-      if (cell.column.id !== '_selector'){
-        setShow(true);
-        setId(cell.row.original.id);
-      }
-    }
-
-    useEffect(() => {
-      const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include'
-      };
-      fetch(`${BACKEND.ADDRESS}/trainer/trainings`, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-              setData(data);
-              setIsLoading(false);
-          });
-    }, []);
+  useEffect(() => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    };
+    fetch(`${BACKEND.ADDRESS}/user/contestants`, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            setData(data);
+            setIsLoading(false);
+        });
+  }, []);
 
     const columns = [
       {
         Header: 'Name',
         columns: [
           {
-            Header: 'Nazwa',
-						accessor: 'title',
-						aggregate: 'count',
-						Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
-          },
-					{
-            Header: 'Basen',
-						accessor: 'pooltitle',
-						aggregate: 'count',
-						Filter: SelectColumnFilter,
-        		filter: 'includes',
-          },
-					{
-            Header: 'Trener',
-						accessor: 'trainerfullname',
-						Filter: SelectColumnFilter,
-        		filter: 'includes',
-          },
-					{
-            Header: 'Data rozpoczęcia',
-						accessor: 'trainingdatestart',
-						disableGroupBy: true,
-          },
-					{
-            Header: 'Data zakończenia',
-						accessor: 'trainingdatestop',
-						disableGroupBy: true,
+            Header: 'Imię',
+            accessor: 'name',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'count',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
           },
           {
-            Header: 'Opis',
-            accessor: 'description',
-						aggregate: 'count',
-						Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
-            minWidth: 200,
+            Header: 'Nazwisko',
+            accessor: 'surname',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'uniqueCount',
+            filter: 'fuzzyText',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
           },
         ],
-      },
+      }
     ].flatMap((c:any)=>c.columns) // remove comment to drop header groups
+
+    let saveDataArray = [{
+      id: props.id,
+      endpoint: '/trainer/assigncontestantwithtraining'
+    }]
+
+    const dummy = useCallback(() => () => null, [])
 
     if(isLoading) return (
       <div className="d-flex justify-content-center">
@@ -240,30 +217,18 @@ const TrainingsTable: React.FC = (props) => {
     );
     if(!isLoading) return (
       <div style={{padding: '2%'}}>
-        <Modal show={show} onHide={handleClose} size='lg'>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Dodawanie użytkowników do treningu
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TrainingInfoModal 
-            id={id} 
-            handleClose={handleClose}
-          />
-        </Modal.Body>
-      </Modal>
-
       <Page>
       {/* <CssBaseline /> */}
       <Table<PersonData>
-        cellClickHandlerUp={cellClickHandlerUp}
         columns={columns}
-        data={data.trainings}
+        data={data.contestants} 
+        onSave
+        saveDataArray={saveDataArray}
+        cellClickHandlerUp={dummy}
       />
       </Page>
     </div>
   );
 }
 
-export default TrainingsTable
+export default TrainingInfoModal

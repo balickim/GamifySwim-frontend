@@ -34,6 +34,7 @@ import { ResizeHandle } from './ResizeHandle'
 import { TablePagination } from './TablePagination'
 import { HeaderCheckbox, RowCheckbox, useStyles } from './TableStyles'
 import { TableToolbar } from './TableToolbar'
+import { TableActions } from './TableActions'
 import { TooltipCell } from './TooltipCell'
 
 export interface Table<T extends object = {}> extends TableOptions<T> {
@@ -150,7 +151,7 @@ const filterTypes = {
 }
 
 export function Table<T extends object>(props: PropsWithChildren<Table<T>>): ReactElement {
-  const { name, columns, onAdd, onDelete, onEdit, onClick } = props
+  const { name, columns, onAdd, onDelete, onEdit, onClick, onSave, saveDataArray } = props
   const classes = useStyles()
 
   const [initialState, setInitialState] = useLocalStorage(`tableState:${name}`, {})
@@ -182,10 +183,9 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
 
   const cellClickHandler = (cell: Cell<T>) => () => {
     // onClick && cell.column.id !== '_selector' && onClick(cell.row)
-    if (cell.column.id !== '_selector')
-    props.handleShow(cell.row)
-  }
-
+    props.cellClickHandlerUp(cell)
+  };
+  
   return (
     <>
       <TableToolbar instance={instance} {...{ onAdd, onDelete, onEdit }} />
@@ -276,7 +276,8 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
         </div>
       </div>
       <TablePagination<T> instance={instance} />
-      <DumpInstance enabled instance={instance} />
+      {/* <DumpInstance enabled instance={instance} /> */}
+      <TableActions instance={instance} {...{ onSave, saveDataArray }} />
     </>
   )
 }
