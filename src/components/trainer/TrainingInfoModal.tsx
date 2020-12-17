@@ -1,7 +1,7 @@
 import { Button, CssBaseline, InputLabel, MenuItem, TextField } from '@material-ui/core'
 import React, { useState, useEffect, useCallback } from 'react';
 import { CellProps, FilterProps, FilterValue, IdType, Row } from 'react-table'
-import { Modal } from 'react-bootstrap';
+import { Modal, FormControl } from 'react-bootstrap';
 import { BACKEND } from '../../config';
 import { Page } from './../Table/Page';
 import { Table } from './../Table/Table/Table';
@@ -161,22 +161,51 @@ function NumberRangeColumnFilter({
 }
 
 const TrainingInfoModal: React.FC = (props) => {
-	const [data, setData] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+    const [dataContestants, setDataContestants] = useState();
+    const [dataTrainingPlan, setDataTrainingPlan] = useState();
+    const [accountToTrainingPlan, setAccountToTrainingPlan] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
+    useEffect(() => {
+      Promise.all([fetchContestants(), fetchTrainingPlans()]).then(() => {
+          setIsLoading(false);
+      })
+    }, []);
+
+    const fetchContestants = () => {
+            const requestOptions = {
+                method: 'POST',
+                body: JSON.stringify({
+                  "training_id": props.id
+                }),
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            };
+            return new Promise((resolve, reject) => {
+                fetch(`${BACKEND.ADDRESS}/trainer/getcontestantswithtrainingplans`, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        setDataContestants(data);
+                        resolve();
+                    })
+            }); 
+        };
+
+    const fetchTrainingPlans = () => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        };
+        return new Promise((resolve, reject) => {
+            fetch(`${BACKEND.ADDRESS}/trainer/alltrainingplans`, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    setDataTrainingPlan(data);
+                    resolve();
+                })
+        }); 
     };
-    fetch(`${BACKEND.ADDRESS}/user/contestants`, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            setData(data);
-            setIsLoading(false);
-        });
-  }, []);
 
     const columns = [
       {
@@ -199,13 +228,56 @@ const TrainingInfoModal: React.FC = (props) => {
             filter: 'fuzzyText',
             Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
           },
+          {
+            Header: 'Poziom',
+            accessor: 'levelofadvancement',
+            width: 100,
+            minWidth: 50,
+            aggregate: 'uniqueCount',
+            filter: 'fuzzyText',
+            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+          },
+          {
+            Header: 'Plan treningowy',
+            width: 100,
+            minWidth: 50,
+            disableGroupBy: true,
+            Cell: cellInfo => (
+              <FormControl 
+                as="select"
+                defaultValue={cellInfo.row.original.account_trainingplan_id}
+                onChange={e => handleSelectChange(e, cellInfo)}
+              >
+                <option>Wybierz plan</option>
+                {dataTrainingPlan.alltrainingplans.map(list => {
+                  return <option 
+                  key={list.id} 
+                  value={list.id}
+                  label={list.title}
+                  />;
+                })}
+              </FormControl>
+            )
+          }
         ],
       }
     ].flatMap((c:any)=>c.columns) // remove comment to drop header groups
 
+    const handleSelectChange = (event, cellInfo) => {
+      if (event !== undefined) {
+        let data = dataContestants;
+        data.contestants.map(element => {
+          if (cellInfo.row.original.id === element.id) {
+            element['account_trainingplan_id'] = parseInt(event.target.value);
+          }
+        })
+        setDataContestants(data);
+      }
+    };
+
     let saveDataArray = [{
       id: props.id,
-      endpoint: '/trainer/assigncontestantwithtraining'
+      endpoint: '/trainer/assigncontestanttotraining'
     }]
 
     const dummy = useCallback(() => () => null, [])
@@ -221,7 +293,7 @@ const TrainingInfoModal: React.FC = (props) => {
       {/* <CssBaseline /> */}
       <Table<PersonData>
         columns={columns}
-        data={data.contestants} 
+        data={dataContestants.contestants} 
         onSave
         saveDataArray={saveDataArray}
         cellClickHandlerUp={dummy}

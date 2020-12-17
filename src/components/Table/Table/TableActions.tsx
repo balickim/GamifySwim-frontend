@@ -21,21 +21,26 @@ export function TableActions<T extends object>({
 
 		let endpoint = saveDataArray[0].endpoint;
 
-		Promise.all(instance.selectedFlatRows.map(element => fetch(`${BACKEND.ADDRESS}${endpoint}`, {
-			method: 'POST',
+		fetch(`${BACKEND.ADDRESS}/trainer/deletecontestantsfromtraining`, {
+			method: 'DELETE',
 			body: JSON.stringify({
-				"account_id": element.original.id, 
-				"account_trainingplan_id": 1, 
 				"training_id": saveDataArray[0].id
 			}),
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include'
+		}).then(() => {
+				Promise.all(instance.selectedFlatRows.map(element => fetch(`${BACKEND.ADDRESS}${endpoint}`, {
+					method: 'POST',
+					body: JSON.stringify({
+						"account_id": element.original.id, 
+						"account_trainingplan_id": element.original.account_trainingplan_id, 
+						"training_id": saveDataArray[0].id
+					}),
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include'
+				})
+			))
 		})
-	)).catch(alert);
-			// .then(resp => Promise.all( resp.map(r => console.log(r.text())) ))
-			// .then(result => {
-			// 	console.log('%cTableActions.tsx line:51 result', 'color: #007acc;', result);
-			// })
   }, [])
 
   return (
