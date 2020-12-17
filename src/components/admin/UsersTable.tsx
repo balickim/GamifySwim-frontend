@@ -169,9 +169,11 @@ const UsersTable: React.FC = (props) => {
 
     const handleClose = () => setShow(false);
 
-    function handleShow(row){
-        setShow(true);
-        setId(row.original.id); 
+    function cellClickHandlerUp(cell){
+      if (cell.column.id !== '_selector'){
+          setShow(true);
+          setId(cell.row.original.id);
+      } 
     }
 
     useEffect(() => {
@@ -280,7 +282,7 @@ const UsersTable: React.FC = (props) => {
       <Page>
       {/* <CssBaseline /> */}
       <Table<PersonData>
-        handleShow={handleShow} 
+        cellClickHandlerUp={cellClickHandlerUp} 
         columns={columns}
         data={data.accounts} 
       />
