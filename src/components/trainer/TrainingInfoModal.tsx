@@ -165,6 +165,8 @@ const TrainingInfoModal: React.FC = (props) => {
     const [dataTrainingPlan, setDataTrainingPlan] = useState();
     const [accountToTrainingPlan, setAccountToTrainingPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedContestants, setSelectedContestants] = useState([]);
+    // const [selectedContestants, setSelectedContestants] = useState([{ 0: true, 9: true }]);
 
     useEffect(() => {
       Promise.all([fetchContestants(), fetchTrainingPlans()]).then(() => {
@@ -186,6 +188,19 @@ const TrainingInfoModal: React.FC = (props) => {
                     .then(response => response.json())
                     .then(data => {
                         setDataContestants(data);
+                        return data;
+                    })
+                      .then(data => {
+                        let selectedRowsObject = {};
+                        let i = 0;
+                        data.contestants.map(element => {
+                          if (element.assigned === true) selectedRowsObject[i] = element.assigned;
+                          i++;
+                        })
+                        return selectedRowsObject;
+                    })
+                    .then(selectedRowsObject => {
+                        setSelectedContestants(selectedRowsObject);
                         resolve();
                     })
             }); 
@@ -297,6 +312,7 @@ const TrainingInfoModal: React.FC = (props) => {
         onSave
         saveDataArray={saveDataArray}
         cellClickHandlerUp={dummy}
+        selectedRows={selectedContestants}
       />
       </Page>
     </div>

@@ -24,6 +24,7 @@ import {
   useRowSelect,
   useSortBy,
   useTable,
+  useMountedLayoutEffect
 } from 'react-table'
 
 import { camelToWords, useDebounce, useLocalStorage } from '../utils'
@@ -151,7 +152,8 @@ const filterTypes = {
 }
 
 export function Table<T extends object>(props: PropsWithChildren<Table<T>>): ReactElement {
-  const { name, columns, onAdd, onDelete, onEdit, onClick, onSave, saveDataArray } = props
+  const { name, columns, onAdd, onDelete, onEdit, onClick, onSave, saveDataArray, selectedRows } = props
+
   const classes = useStyles()
 
   const [initialState, setInitialState] = useLocalStorage(`tableState:${name}`, {})
@@ -165,11 +167,20 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
     },
     ...hooks
   )
+  const setSelectedRows => {
+    if(selectedRows){
+      instance.rows.map((element, index) => {
+        element['isSelected'] = selectedRows[index];
+      })
+    }
+  } 
 
+  // const { getTableProps, headerGroups, getTableBodyProps, page, prepareRow, state, state: { selectedRowIds } } = instance
   const { getTableProps, headerGroups, getTableBodyProps, page, prepareRow, state } = instance
   const debouncedState = useDebounce(state, 500)
 
   useEffect(() => {
+    // const { sortBy, filters, pageSize, columnResizing, hiddenColumns, selectedRows, selectedRowIds } = debouncedState
     const { sortBy, filters, pageSize, columnResizing, hiddenColumns } = debouncedState
     const val = {
       sortBy,
@@ -177,9 +188,12 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
       pageSize,
       columnResizing,
       hiddenColumns,
+      // selectedRowIds: selectedRows
+      // selectedRows
     }
     setInitialState(val)
-  }, [setInitialState, debouncedState])
+  }, [setInitialState, debouncedState, setSelectedRows])
+  // }, [setInitialState, debouncedState])
 
   const cellClickHandler = (cell: Cell<T>) => () => {
     // onClick && cell.column.id !== '_selector' && onClick(cell.row)
@@ -276,7 +290,7 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
         </div>
       </div>
       <TablePagination<T> instance={instance} />
-      {/* <DumpInstance enabled instance={instance} /> */}
+      <DumpInstance enabled instance={instance} />
       <TableActions instance={instance} {...{ onSave, saveDataArray }} />
     </>
   )
