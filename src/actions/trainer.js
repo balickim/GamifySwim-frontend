@@ -88,3 +88,29 @@ export const addUserTrainingPlans = ({ id }) => fetchFromTrainer({
     ERROR_TYPE: TRAINER.FETCH_ERROR,
     SUCCESS_TYPE: TRAINER.FETCH_SUCCESS
 });
+
+export const addTrainingPlan = ({ title, description, deleted }) => fetchFromTrainer({
+    endpoint: 'accounttrainingplan',
+    options: {
+        method: 'POST',
+        body: JSON.stringify({ title, description, deleted }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    },
+    FETCH_TYPE: TRAINER.FETCH,
+    ERROR_TYPE: TRAINER.FETCH_ERROR,
+    SUCCESS_TYPE: TRAINER.FETCH_SUCCESS
+});
+
+export const addTrainingPlanEntry = ({ id, swimmingstyle_id, repetitions, breakseconds, length, order }) => fetchFromTrainer({
+    endpoint: 'trainingplanentry',
+    options: {
+        method: 'POST',
+        body: JSON.stringify({ id, swimmingstyle_id, repetitions, breakseconds, length, order }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    },
+    FETCH_TYPE: TRAINER.FETCH,
+    ERROR_TYPE: TRAINER.FETCH_ERROR,
+    SUCCESS_TYPE: TRAINER.FETCH_SUCCESS
+});
