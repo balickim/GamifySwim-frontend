@@ -8,6 +8,7 @@ import { Table } from './../Table/Table/Table';
 import { PersonData, makeData } from './../Table/utils';
 import TrainingInfoModal from './TrainingInfoModal';
 import Swimmer from '../../assets/swimmer.gif';
+import dayjs from 'dayjs';
 
 function roundedMedian(values: any[]) {
   let min = values[0] || ''
@@ -214,13 +215,25 @@ const TrainingsTable: React.FC = (props) => {
           },
 					{
             Header: 'Data rozpoczęcia',
-						accessor: 'trainingdatestart',
 						disableGroupBy: true,
+            accessor: d => {
+              if (d.trainingdatestart) {
+                return dayjs(d.trainingdatestart).format("DD-MM-YYYY HH:mm:ss")
+                } else {
+                  return 'Brak danych'
+                }
+            }
           },
 					{
             Header: 'Data zakończenia',
-						accessor: 'trainingdatestop',
 						disableGroupBy: true,
+            accessor: d => {
+              if (d.trainingdatestop) {
+                return dayjs(d.trainingdatestop).format("DD-MM-YYYY HH:mm:ss")
+                } else {
+                  return 'Brak danych'
+                }
+            }
           },
           {
             Header: 'Opis',

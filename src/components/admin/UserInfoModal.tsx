@@ -7,6 +7,7 @@ import { Page } from './../Table/Page';
 import { Table } from './../Table/Table/Table';
 import { PersonData, makeData } from './../Table/utils';
 import Swimmer from '../../assets/swimmer.gif';
+import dayjs from 'dayjs';
 
 function roundedMedian(values: any[]) {
   let min = values[0] || ''
@@ -184,7 +185,7 @@ const UserInfoModal: React.FC = (props) => {
         Header: 'Name',
         columns: [
           {
-            Header: 'Imię',
+            Header: 'ID sesji',
             accessor: 'sessionid',
             width: 100,
             minWidth: 50,
@@ -192,25 +193,31 @@ const UserInfoModal: React.FC = (props) => {
             Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Names`,
           },
           {
-            Header: 'Nazwisko',
-            accessor: 'sessiondatestart',
+            Header: 'Start sesji',
             width: 100,
             minWidth: 50,
-            aggregate: 'uniqueCount',
-            filter: 'fuzzyText',
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+            accessor: d => {
+              if (d.sessiondatestart) {
+                return dayjs(d.sessiondatestart).format("DD-MM-YYYY HH:mm:ss")
+                } else {
+                  return 'Brak danych'
+                }
+            }
           },
 					{
-            Header: 'Nazwisko',
-            accessor: 'sessiondatestop',
+            Header: 'Koniec sesji',
             width: 100,
             minWidth: 50,
-            aggregate: 'uniqueCount',
-            filter: 'fuzzyText',
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
+            accessor: d => {
+              if (d.sessiondatestop) {
+                return dayjs(d.sessiondatestop).format("DD-MM-YYYY HH:mm:ss")
+                } else {
+                  return 'Brak danych'
+                }
+            }
           },
 					{
-            Header: 'Nazwisko',
+            Header: 'Informacje o urządzeniu',
             accessor: 'deviceinfo',
             width: 100,
             minWidth: 50,

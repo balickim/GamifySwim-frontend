@@ -6,9 +6,9 @@ import { BACKEND } from '../../config';
 import { Page } from './../Table/Page';
 import { Table } from './../Table/Table/Table';
 import { PersonData, makeData } from './../Table/utils';
-// import ContestantInfo from './../ContestantInfo';
 import UserInfoModal from './UserInfoModal';
 import Swimmer from '../../assets/swimmer.gif';
+import dayjs from 'dayjs';
 
 function roundedMedian(values: any[]) {
   let min = values[0] || ''
@@ -222,40 +222,13 @@ const UsersTable: React.FC = (props) => {
             width: 100,
             minWidth: 50,
             align: 'right',
-            Filter: SliderColumnFilter,
-            filter: 'equals',
-            aggregate: 'average',
-            disableGroupBy: true,
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (avg)`,
-          },
-          {
-            Header: 'Visits',
-            accessor: 'visits',
-            width: 50,
-            minWidth: 50,
-            align: 'right',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            aggregate: 'sum',
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (total)`,
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-            width: 50,
-            minWidth: 50,
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
-            width: 50,
-            minWidth: 50,
-            Filter: SliderColumnFilter,
-            filter: filterGreaterThan,
-            aggregate: roundedMedian,
-            Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} (med)`,
+            accessor: d => {
+              if (d.birthdate) {
+                return dayjs(d.birthdate).format("DD-MM-YYYY HH:mm:ss")
+                } else {
+                  return 'Brak danych'
+                }
+            }
           },
         ],
       },
