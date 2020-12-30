@@ -152,7 +152,7 @@ const filterTypes = {
 }
 
 export function Table<T extends object>(props: PropsWithChildren<Table<T>>): ReactElement {
-  const { name, columns, onAdd, onDelete, onEdit, onClick, onSave, saveDataArray, selectedRows } = props
+  const { name, columns, onAdd, onDelete, onEdit, onClick, onSave, saveDataObject, selectedRows } = props
 
   const classes = useStyles()
 
@@ -196,7 +196,6 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
   // }, [setInitialState, debouncedState])
 
   const cellClickHandler = (cell: Cell<T>) => () => {
-    // onClick && cell.column.id !== '_selector' && onClick(cell.row)
     props.cellClickHandlerUp(cell)
   };
   
@@ -291,7 +290,7 @@ export function Table<T extends object>(props: PropsWithChildren<Table<T>>): Rea
       </div>
       <TablePagination<T> instance={instance} />
       <DumpInstance enabled instance={instance} />
-      <TableActions instance={instance} {...{ onSave, saveDataArray }} />
+      <TableActions instance={instance} {...{ onSave, saveDataObject }} />
     </>
   )
 }

@@ -160,16 +160,16 @@ function NumberRangeColumnFilter({
   )
 }
 
-const TrainingInfoModal: React.FC = (props) => {
+const TrainingFinishedInfoModal: React.FC = (props) => {
     const [dataContestants, setDataContestants] = useState();
     const [dataTrainingPlan, setDataTrainingPlan] = useState();
     const [accountToTrainingPlan, setAccountToTrainingPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedContestants, setSelectedContestants] = useState([]);
-    // const [selectedContestants, setSelectedContestants] = useState([{ 0: true, 9: true }]);
+    const [checkedItems, setCheckedItems] = useState({});
 
     useEffect(() => {
-      Promise.all([fetchContestants(), fetchTrainingPlans()]).then(() => {
+      Promise.all([fetchContestants()]).then(() => {
           setIsLoading(false);
       })
     }, []);
@@ -184,7 +184,7 @@ const TrainingInfoModal: React.FC = (props) => {
                 credentials: 'include'
             };
             return new Promise((resolve, reject) => {
-                fetch(`${BACKEND.ADDRESS}/trainer/getcontestantswithtrainingplans`, requestOptions)
+                fetch(`${BACKEND.ADDRESS}/trainer/getassignedcontestants`, requestOptions)
                     .then(response => response.json())
                     .then(data => {
                         setDataContestants(data);
@@ -194,7 +194,7 @@ const TrainingInfoModal: React.FC = (props) => {
                         let selectedRowsObject = {};
                         let i = 0;
                         data.contestants.map((element, index) => {
-                          if (element.assigned === true) selectedRowsObject[index] = element.assigned;
+                          if (element.present === true) selectedRowsObject[index] = element.present;
                           i++;
                         })
                         return selectedRowsObject;
@@ -205,22 +205,6 @@ const TrainingInfoModal: React.FC = (props) => {
                     })
             }); 
         };
-
-    const fetchTrainingPlans = () => {
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
-        };
-        return new Promise((resolve, reject) => {
-            fetch(`${BACKEND.ADDRESS}/trainer/alltrainingplans`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setDataTrainingPlan(data);
-                    resolve();
-                })
-        }); 
-    };
 
     const columns = [
       {
@@ -253,37 +237,29 @@ const TrainingInfoModal: React.FC = (props) => {
             Aggregated: ({ cell: { value } }: CellProps<PersonData>) => `${value} Unique Names`,
           },
           {
-            Header: 'Plan treningowy',
+            Header: 'Wykonał plan',
             width: 100,
             minWidth: 50,
             disableGroupBy: true,
             Cell: cellInfo => (
-              <FormControl 
-                as="select"
-                defaultValue={cellInfo.row.original.account_trainingplan_id}
-                onChange={e => handleSelectChange(e, cellInfo)}
-              >
-                <option>Wybierz plan</option>
-                {dataTrainingPlan.alltrainingplans.map(list => {
-                  return <option 
-                  key={list.id} 
-                  value={list.id}
-                  label={list.title}
-                  />;
-                })}
-              </FormControl>
+              <input 
+                  name="rememberMe" 
+                  checked={cellInfo.row.original.fulfilled} 
+                  onChange={e => handleCheckboxChange(e, cellInfo)} 
+                  type="checkbox"/> 
             )
           }
         ],
       }
     ].flatMap((c:any)=>c.columns) // remove comment to drop header groups
 
-    const handleSelectChange = (event, cellInfo) => {
+    const handleCheckboxChange = (event, cellInfo) => {
       if (event !== undefined) {
         let data = dataContestants;
+        setCheckedItems({...checkedItems, [event.target.name] : event.target.checked });
         data.contestants.map(element => {
           if (cellInfo.row.original.id === element.id) {
-            element['account_trainingplan_id'] = parseInt(event.target.value);
+            element['fulfilled'] = event.target.checked;
           }
         })
         setDataContestants(data);
@@ -291,10 +267,10 @@ const TrainingInfoModal: React.FC = (props) => {
     };
 
     let saveDataObject = {
-      name: 'all',
+      name: 'finished',
       id: props.id,
-      deleteEndpoint: '/trainer/deletecontestantsfromtraining',
-      postEndpoint: '/trainer/assigncontestanttotraining'
+      deleteEndpoint: '/trainer/contestantpresentandplanfulfilled',
+      postEndpoint: '/trainer/contestantpresentandplanfulfilled'
     }
 
     const dummy = useCallback(() => () => null, [])
@@ -321,4 +297,4 @@ const TrainingInfoModal: React.FC = (props) => {
   );
 }
 
-export default TrainingInfoModal
+export default TrainingFinishedInfoModal

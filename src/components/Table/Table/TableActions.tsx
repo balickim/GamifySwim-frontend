@@ -11,7 +11,7 @@ const actionButtons: CSS.Properties = {
 export function TableActions<T extends object>({
   instance,
 	onSave,
-	saveDataArray
+	saveDataObject
 }: PropsWithChildren<TableActions<T>>): ReactElement | null {
   const { columns } = instance;
 	const [buttonClicked, setButtonClicked] = useState(false);
@@ -19,28 +19,53 @@ export function TableActions<T extends object>({
   const handleSave = useCallback(() => {
 		setButtonClicked(true);
 
-		let endpoint = saveDataArray[0].endpoint;
+		let deleteEndpoint = saveDataObject.deleteEndpoint;
+		let postEndpoint = saveDataObject.postEndpoint;
 
-		fetch(`${BACKEND.ADDRESS}/trainer/deletecontestantsfromtraining`, {
+		if (saveDataObject.name === 'all') {
+		fetch(`${BACKEND.ADDRESS}${deleteEndpoint}`, {
 			method: 'DELETE',
 			body: JSON.stringify({
-				"training_id": saveDataArray[0].id
+				"training_id": saveDataObject.id
 			}),
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include'
-		}).then(() => {
-				Promise.all(instance.selectedFlatRows.map(element => fetch(`${BACKEND.ADDRESS}${endpoint}`, {
+			}).then(() => {
+				Promise.all(instance.selectedFlatRows.map(element => fetch(`${BACKEND.ADDRESS}${postEndpoint}`, {
 					method: 'POST',
 					body: JSON.stringify({
 						"account_id": element.original.id, 
 						"account_trainingplan_id": element.original.account_trainingplan_id, 
-						"training_id": saveDataArray[0].id
-					}),
+						"training_id": saveDataObject.id
+      		}),
 					headers: { 'Content-Type': 'application/json' },
 					credentials: 'include'
 				})
 			))
 		})
+		} else if (saveDataObject.name === 'finished') {
+			fetch(`${BACKEND.ADDRESS}${deleteEndpoint}`, {
+				method: 'DELETE',
+				body: JSON.stringify({
+					"training_id": saveDataObject.id
+				}),
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include'
+				}).then(() => {
+					Promise.all(instance.selectedFlatRows.map(element => fetch(`${BACKEND.ADDRESS}${postEndpoint}`, {
+						method: 'PUT',
+						body: JSON.stringify({
+							"account_id": element.original.id,
+							"training_id": saveDataObject.id,
+							"present": true,
+							"fulfilled": element.original.fulfilled
+						}),
+						headers: { 'Content-Type': 'application/json' },
+						credentials: 'include'
+					})
+				))
+			})
+		} 
   }, [])
 
   return (

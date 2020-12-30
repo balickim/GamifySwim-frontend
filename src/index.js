@@ -12,6 +12,7 @@ import AuthForm from './components/AuthForm';
 import Home from './components/Dashboard/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TrainingManagement from './components/trainer/TrainingManagement';
+import SummaryManagement from './components/trainer/SummaryManagement';
 import Navigation from './components/Navigation';
 import Designer from './stimulsoft/Designer';
 import PermissionDenied from './components/PermissionDenied';
@@ -52,6 +53,7 @@ store.dispatch(fetchAuthenticated())
                                 <Navigation/>
                                     <AuthRoute exact path='/home' component={Home} />
                                     {authorize(3) ? <AuthRoute exact path='/trainingmanagement' component={TrainingManagement}/> : null }
+                                    {authorize(3) ? <AuthRoute exact path='/summarymanagement' component={SummaryManagement}/> : null }
                                     {authorize(1) ? <AuthRoute exact path='/usermanagement' component={UserManagement}/> : null }
                             </div>
                         </Fragment>

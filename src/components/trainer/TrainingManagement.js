@@ -13,7 +13,7 @@ function TrainingManagement(){
                 <div style={{paddingTop: '10px'}}>
                     <Container>
                     <Row>
-                        <Col><h3>Treningi</h3><TrainingsTable /></Col>
+                        <Col><h3>Wszystkie treningi</h3><TrainingsTable /></Col>
                     </Row>
                     <Row>
                         <Col sm={4}><h3>Dodaj trening</h3><TrainingAdd /></Col>
@@ -22,7 +22,7 @@ function TrainingManagement(){
                     </Row>
                     <Row>
                         <Col sm={4}><h3>Dodaj plan</h3><TrainingPlanAdd /></Col>
-                        <Col sm={4}><h3>Dodaj wpis</h3><TrainingPlanEntryAdd /></Col>
+                        <Col sm={4}><h3>Dodaj wpis do planu</h3><TrainingPlanEntryAdd /></Col>
                     </Row>
                     </Container>
                 </div>

@@ -63,6 +63,11 @@ class Topbar extends Component {
                                     Treningi
                                 </Nav.Link> 
                             : null }
+                            {userRole === 3 ? 
+                                <Nav.Link as={NavLink} to='/summarymanagement' exact>
+                                    Podsumowania
+                                </Nav.Link> 
+                            : null }
                             {userRole === 1 ? 
                                 <Nav.Link as={NavLink} to='/usermanagement'>
                                     Zarządzaj
