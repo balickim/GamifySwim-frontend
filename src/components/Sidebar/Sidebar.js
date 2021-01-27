@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Menu from './Menu/Menu'
 import AccountInfo from './AccountInfo'
 import { Button } from 'react-bootstrap';
+import ProgressBar from '../Dashboard/ProgressBar'
 
 const Container = styled.div`
     background-color: #007BB5;
@@ -23,6 +24,7 @@ render() {
         <Container className='sidebar'>
             <AccountInfo />
             <Menu />
+            {/* <ProgressBar /> */}
         </Container>
         )
     }

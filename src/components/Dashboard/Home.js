@@ -1,39 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Swimmer from '../../assets/swimmer.gif';
 import { BACKEND } from '../../config';
+import { connect } from 'react-redux';
+import { fetchAccountInfo } from '../../actions/accountInfo';
 import { Container, Row, Col } from 'react-bootstrap';
 import ProgressBar from './ProgressBar';
 import PieChartComponent from './PieChartComponent'
 import Calendar from './Calendar/Calendar'
 import Badge from './Badge';
 
-function Home(){
+function Home(props){
     const [isLoading,setIsLoading] = useState(true);
     const [dataExperience,setDataExperience] = useState({});
     const [dataChart,setDataChart] = useState({});
     const [dataBadgeCount,setDataBadgeCount] = useState({});
 
     useEffect(() => {
-        Promise.all([fetchExperience(), fetchChartData(), fetchBadgeCount()]).then(() => {
+        props.fetchAccountInfo();
+
+        Promise.all([fetchChartData(), fetchBadgeCount()]).then(() => {
             setIsLoading(false);
         });
     }, [])
-
-    const fetchExperience = () => {
-        const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
-        };
-        return new Promise((resolve, reject) => {
-            fetch(`${BACKEND.ADDRESS}/experience/info`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    setDataExperience(data);
-                    resolve();
-                })
-        }); 
-    }
 
     const fetchChartData = () => {
         const requestOptions = {
@@ -69,9 +57,11 @@ function Home(){
 
     const badgesJSX = badgeCount => {
         let content = [];
-        for (let i = 0; i < badgeCount; i++) {
-            const item = badgeCount[i];
-            content.push(<Badge id={i} />);
+        for (let i = 0; i <= badgeCount; i++) {
+            if(i !== 6) {
+                const item = badgeCount[i];
+                content.push(<Col xs={6}><Badge key={i} id={i} /></Col>);
+            }
         }
         return content;
     };
@@ -83,21 +73,23 @@ function Home(){
     );
     return (
         <div className='content'>
+            {/* {props.accountInfo.roleId} */}
             <div style={{padding: 10, textAlign: 'center'}}><PieChartComponent data={dataChart.data} /></div>
                 <Container>
-                    <Row>
+                    <Row style={{marginBottom: '50px'}}>
                         <Col><Calendar /></Col>
                     </Row>
                     <Row>
-                        {/* <Col><Badge data={dataBadgeInfo} /></Col> <Col><Badge data={dataBadgeInfo} /></Col> <Col><Badge data={dataBadgeInfo} /></Col> */}
-                        <Col>{badgesJSX(dataBadgeCount.data.count)}</Col>
+                        {badgesJSX(dataBadgeCount.data.count)}
                     </Row>
                 </Container>
-                <ProgressBar 
-                percent={dataExperience ? 0 : dataExperience.exp[0].barpercent } 
-                level={dataExperience ? 0 : dataExperience.exp[0].level } />
+                <ProgressBar />
         </div>
     );
 }
 
-export default Home
+// export default Home
+export default connect(
+    ({ accountInfo }) => ({ accountInfo }),
+    { fetchAccountInfo }
+)(Home);
