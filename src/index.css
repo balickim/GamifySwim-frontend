@@ -32,17 +32,6 @@ body {
     font-size: 1em;
   }
 }
-@media (min-width: 1200px) {
-  .calendar-rectangle {
-    width: 30%;
-    font-size: 1em;
-  }
-}
-@media (min-width: 1300px) {
-  .calendar-rectangle {
-    width: 20%;
-  }
-}
 .calendar-rectangle:before {
   content: "";
   display: block;

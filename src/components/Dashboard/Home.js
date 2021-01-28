@@ -4,7 +4,6 @@ import { BACKEND } from '../../config';
 import { connect } from 'react-redux';
 import { fetchAccountInfo } from '../../actions/accountInfo';
 import { Container, Row, Col } from 'react-bootstrap';
-import ProgressBar from './ProgressBar';
 import PieChartComponent from './PieChartComponent'
 import Calendar from './Calendar/Calendar'
 import Badge from './Badge';
@@ -74,16 +73,15 @@ function Home(props){
     return (
         <div className='content'>
             {/* {props.accountInfo.roleId} */}
-            <div style={{padding: 10, textAlign: 'center'}}><PieChartComponent data={dataChart.data} /></div>
                 <Container>
-                    <Row style={{marginBottom: '50px'}}>
+                    <Row style={{marginBottom: '30px', marginTop: '30px'}}>
                         <Col><Calendar /></Col>
                     </Row>
                     <Row>
                         {badgesJSX(dataBadgeCount.data.count)}
                     </Row>
                 </Container>
-                <ProgressBar />
+                <div style={{padding: 10, textAlign: 'center'}}><PieChartComponent data={dataChart.data} /></div>
         </div>
     );
 }

@@ -35,14 +35,26 @@ function progressBar(){
         </div>
     );
 
-    const progressInstance = <ProgressBar animated 
+    const progressInstance = <ProgressBar animated variant="success"
         now={dataExperience.exp[0] === undefined ? 0 : dataExperience.exp[0].barpercent} 
         label={`${dataExperience.exp[0] === undefined ? 0 : dataExperience.exp[0].barpercent}%`}/>;
 
         return (
-                <div style={{ padding: 100, textAlign: 'center' }}>
+                <div style={{ width: '90%', padding: 10, textAlign: 'center' }}>
+                <div style={{       
+                borderRadius: '50%',
+                width: '70px',
+                height: '70px',
+                padding: '15px',
+                background: '#fff',
+                border: '2px solid #666',
+                color: '#666',
+                marginLeft: '35%',
+                marginBottom: '10px',
+                font: '32px Arial, sans-serif'
+                }}>
+                    {dataExperience.exp[0] === undefined ? 0 : dataExperience.exp[0].level}</div>
                     {progressInstance}
-                    <div style={{ fontSize: 30, color: 'yellow' }}>{dataExperience.exp[0] === undefined ? 0 : dataExperience.exp[0].level}</div>
                 </div>
         );
 }

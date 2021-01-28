@@ -13,6 +13,8 @@ const Container = styled.div`
 
 const ProfileImg = styled.img`
     height: 5rem;
+    margin-left: 65px;
+    margin-bottom: 10px;
 `
 const ProfileName = styled.h1`
     font-size: 1rem;
