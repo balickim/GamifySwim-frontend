@@ -70,9 +70,8 @@ function Home(props){
             <img src={Swimmer} width="500" height="600"/>
         </div>
     );
-    return (
+    if(props.accountInfo.roleId === 2) { return (
         <div className='content'>
-            {/* {props.accountInfo.roleId} */}
                 <Container>
                     <Row style={{marginBottom: '30px', marginTop: '30px'}}>
                         <Col><Calendar /></Col>
@@ -83,7 +82,17 @@ function Home(props){
                 </Container>
                 <div style={{padding: 10, textAlign: 'center'}}><PieChartComponent data={dataChart.data} /></div>
         </div>
-    );
+    )} else {
+        return (
+            <div className='content'>
+                <Container>
+                    <Row style={{marginBottom: '30px', marginTop: '30px'}}>
+                        <Col><Calendar /></Col>
+                    </Row>
+                </Container>
+            </div>
+        )
+    }
 }
 
 // export default Home

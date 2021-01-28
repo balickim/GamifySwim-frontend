@@ -178,6 +178,8 @@ function Calendar(props) {
     let year = JSON.stringify(selectedMonth._d).substr(1,4);
     let month = selectedMonth._d.getMonth()+1;
 
+    if(month === 1) year++; 
+
         const requestOptions = {
           method: 'POST',
           body: JSON.stringify({month, year}),
